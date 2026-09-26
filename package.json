@@ -1,0 +1,9 @@
+{
+  "name": "house-scanning-landing",
+  "private": true,
+  "packageManager": "bun@1.3.10",
+  "scripts": {
+    "dev": "bun scripts/dev.ts",
+    "build": "bun scripts/build.ts"
+  }
+}
