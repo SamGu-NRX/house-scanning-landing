@@ -6,3 +6,5 @@ out/
 .env*
 .DS_Store
 .local/
+output/
+.playwright-cli/
