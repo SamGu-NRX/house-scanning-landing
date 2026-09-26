@@ -4,7 +4,14 @@ For the next person refining the landing page: these references inform the inter
 
 ## Patterns used here
 
-The phone keeps one scene in place through capture, reconstruction, scale, and fit. Its stage indicator moves between positions; pause freezes the scene and its progress together. The coverage illustration uses a native range input, so dragging and arrow keys reveal the same content. Research questions and FAQs use native disclosures. Section entrances play once, with a short stagger; keyboard input and reduced motion suppress movement.
+The phone follows four steps: find the meter, walk the wall, mark nearby features, and review a possible battery placement. Its layout and wording follow `ios/HouseScan/UI` on the `house-scanning-master` development branch `t3/ios-mvf-r7-ui` at `dd44fc3`. This source does not establish what is installed through TestFlight. The page calls the drawn screens an illustrated preview.
+
+- The wall is defined once in centimeters (`#meter-wall`, `#yard` and `#far-yard` in `index.html`) and reused by the phone camera, the result model and the coverage study.
+- Phone chrome is sized in iPhone points: `--pt` is 1/393 of the screen width. The values come from `Theme.swift`, `CameraChrome.swift`, `Buttons.swift`, `InstructionCard.swift`, `PhotoCounter.swift`, `Scrim.swift` and `WallTape.swift`. The status bar and home indicator share a 393 × 851 SVG grid with the frame's island.
+- `demo.js` builds one scene timeline. Each stage plays a window of it under its own clock, which also drives the progress bar in the stage control, so pause freezes both. Stage buttons, keyboard play and reduced motion show each stage's last frame.
+- The ending uses the app's manual-review headline because the illustrated placement needs review. The upload screen uses a list icon at Sam's request to remove up-arrows.
+
+The coverage illustration puts the same wall under haze, and a native range input moves the haze's edge, so dragging and arrow keys reveal the same content. Research questions and FAQs use native disclosures. Section entrances play once, with a short stagger; keyboard input and reduced motion suppress movement.
 
 Only the Magic UI device geometry is adapted source code. Its MIT notice is in `assets/iphone-frame-LICENSE.txt`. The other interactions are local implementations informed by the references.
 
@@ -30,4 +37,4 @@ Only the Magic UI device geometry is adapted source code. Its MIT notice is in `
 
 ## Replacing the illustration
 
-The scene lives inside `.scene-viewport`; device chrome and controls live outside it. A future recording can replace the SVG, but the stage timings and play, pause, replay controls must then follow the video's actual timeline. Keep the concept label until the recording demonstrates the real capture and reconstruction path.
+The camera scene is `svg.scene` inside `.app`, beneath the drawn controls. A recording of the real app can replace all of `.app`, including its chrome. Keep the device frame and external playback controls, and bind the stage timings to the video's timeline. Keep the Illustration badge while the screens are drawn.

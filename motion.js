@@ -23,19 +23,20 @@
   }, { threshold: .12 });
   // Short, once-only entrances introduce sections without moving text as it is read.
   document.querySelectorAll('.hero-copy, .phone-demo, .purpose > *, .section-heading > *, .steps > li, .capture-art, .evidence-copy, .inside-columns > *, .model-art, .technical-row > *, .live-plan, .questions-intro, .questions, .closing-content > *').forEach((element) => observer.observe(element));
-  // A native range keeps the coverage reveal usable by touch and keyboard.
+  // A native range keeps the coverage reveal usable by touch and keyboard. It moves the haze's left edge.
   const coverage = document.querySelector('[data-coverage]');
   if (coverage) {
     const range = coverage.querySelector('input[type="range"]');
-    const picture = coverage.querySelector('[data-coverage-image]');
+    const haze = coverage.querySelector('[data-coverage-unknown]');
     const divider = coverage.querySelector('[data-coverage-divider]');
-    if (!range || !picture || !divider) throw new Error('Coverage study requires a range, image, and divider.');
+    const label = coverage.querySelector('.coverage-label');
+    if (!range || !haze || !divider || !label) throw new Error('Coverage study requires a range, haze, divider, and label.');
     const reveal = () => {
       const value = Number(range.value);
-      picture.style.clipPath = `inset(0 ${100 - value}% 0 0)`;
+      haze.style.clipPath = `inset(0 0 0 ${value}%)`;
       divider.style.transform = `translateX(${value}%)`;
-      coverage.querySelector('.coverage-label').style.opacity = value < 15 ? '0' : '1';
-      range.setAttribute('aria-valuetext', `${value}% of the illustration revealed`);
+      label.style.opacity = value < 15 ? '0' : '1';
+      range.setAttribute('aria-valuetext', `${value}% of the wall in view`);
     };
     range.addEventListener('input', reveal);
     reveal();
