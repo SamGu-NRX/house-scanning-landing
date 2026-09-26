@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#f5f6f2">
+    <meta name="description" content="A simpler starting point for a home battery survey. Explore a phone capture, a shared 3D view, and a possible battery location.">
+    <title>House scanning · A clearer picture of home</title>
+    <link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="styles.css">
+    <script src="demo.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <svg class="icon-definitions" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <symbol id="icon-home" viewBox="0 0 160 160"><path d="M13 71 80 17l67 54-13 16-54-43-54 43Z" fill="currentColor"/><path d="M34 81 80 44l46 37v63H94v-44H66v44H34Z" fill="currentColor"/></symbol>
+      <symbol id="icon-phone" viewBox="0 0 160 160"><rect x="37" y="9" width="86" height="142" rx="19" fill="currentColor"/><rect x="46" y="19" width="68" height="113" rx="11" fill="var(--icon-light)"/><rect x="66" y="24" width="28" height="7" rx="3.5" fill="currentColor"/><path d="m54 78 26-23 26 23v40H54Z" fill="var(--icon-mid)"/><path d="M73 90h15v28H73Z" fill="var(--icon-light)"/><circle cx="80" cy="142" r="4" fill="var(--icon-light)"/></symbol>
+      <symbol id="icon-model" viewBox="0 0 160 160"><path d="m80 8 66 37-66 38-66-38Z" fill="var(--icon-mid)"/><path d="m14 55 61 35v62L14 117Z" fill="currentColor"/><path d="m85 90 61-35v62l-61 35Z" fill="var(--icon-soft)"/></symbol>
+      <symbol id="icon-ruler" viewBox="0 0 160 160"><path d="M20 14h45v80h81v46H20Z" fill="currentColor"/><path d="M46 28h19v6H46zm7 19h12v6H53zm-7 19h19v6H46zm34 28h6v20h-6zm21 0h6v12h-6zm21 0h6v20h-6Z" fill="var(--icon-light)"/><path d="m82 28 38 38m-3-28 3 28-28-3" fill="none" stroke="var(--icon-soft)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="icon-battery" viewBox="0 0 160 160"><rect x="40" y="17" width="80" height="137" rx="12" fill="currentColor"/><rect x="64" y="5" width="32" height="18" rx="5" fill="currentColor"/><path d="M87 44 60 88h20l-9 37 31-51H82Z" fill="var(--icon-light)"/></symbol>
+      <symbol id="icon-photos" viewBox="0 0 160 160"><rect x="14" y="34" width="111" height="108" rx="12" fill="var(--icon-mid)"/><rect x="34" y="14" width="112" height="110" rx="12" fill="currentColor"/><path d="m47 105 28-34 18 19 18-28 22 43Z" fill="var(--icon-light)"/><circle cx="66" cy="47" r="12" fill="var(--icon-light)"/></symbol>
+    </svg>
+    <header class="site-header wrap">
+      <a class="wordmark" href="#" aria-label="House scanning home"><svg width="38" height="38" aria-hidden="true"><use href="#icon-home"/></svg><span>House scanning</span></a>
+      <nav aria-label="Main navigation"><a href="#how">How it works</a><a href="#technical">The technical idea</a><a class="project-link" href="https://github.com/SamGu-NRX/house-scanning">View project <span aria-hidden="true">↗</span></a></nav>
+    </header>
+    <main id="main" tabindex="-1">
+      <section class="hero wrap" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <h1 id="hero-title">A clearer picture<br>of home.</h1>
+          <p class="hero-description">Finding a place for a home battery starts with understanding your home. We're exploring a simpler way to do that, using a phone walkthrough of the space around your electric meter.</p>
+          <p class="hero-description secondary">The goal is a 3D view that takes shape as you scan, then helps a reviewer consider where a battery could fit. One useful capture, with less back and forth.</p>
+          <a class="button" href="#how">Explore the approach <span aria-hidden="true">↓</span></a>
+        </div>
+        <figure class="phone-demo" data-demo data-phase="capture" data-playing="false" data-manual="true" tabindex="-1" aria-label="Illustrated phone survey demo">
+          <div class="phone-shell">
+            <div class="phone-top"><span>House survey</span><span class="demo-badge">Demo</span></div>
+            <div class="phone-view">
+              <div class="view-title"><span class="phase-copy capture-copy">Capture the wall</span><span class="phase-copy reconstruct-copy">Building the view</span><span class="phase-copy measure-copy">Check a distance</span><span class="phase-copy fit-copy">Explore a possible fit</span></div>
+              <div class="scene-viewport"><svg class="house-drawing" viewBox="75 60 490 400" width="620" height="470" role="img" aria-labelledby="drawing-title drawing-desc">
+              <title id="drawing-title">A study of the meter wall</title>
+              <desc id="drawing-desc">An illustrated house exterior with a window, electric meter, and optional battery outline. This is a concept, not a measured or approved installation.</desc>
+              <defs>
+                <pattern id="wall-lines" width="10" height="28" patternUnits="userSpaceOnUse">
+                  <path d="M0 27.5H10" fill="none" stroke="#cfd5ca" stroke-width=".7"/>
+                </pattern>
+              </defs>
+              <g class="house-shape"><path d="m80 365 346 60 144-77-343-51Z" fill="#dce1d7" opacity=".48"/>
+              <path d="m133 148 288 32v218l-288-39Z" fill="#edf0e8"/>
+              <path d="m421 180 102-54v215l-102 57Z" fill="#dfe5d9"/>
+              <path d="m133 148 288 32v218l-288-39Z" fill="url(#wall-lines)"/>
+              <path d="m123 151 107-80 304 37-108 77Z" fill="#e1e6db" stroke="#879583" stroke-width="1.2" stroke-linejoin="round"/>
+              <path d="m123 151 303 34 108-77M426 185v213l-293-39V154M426 398l97-57V118" fill="none" stroke="#889583" stroke-width="1.2" stroke-linejoin="round"/>
+              <path d="m145 153 88-66 275 32M167 156l85-66m-52 70 82-66m-49 70 78-66m-45 70 73-67m-39 71 68-67m-35 71 64-67" fill="none" stroke="#b7c2ae" stroke-width=".8"/>
+              <path d="m160 190 78 9v97l-78-10Z" fill="#d9e0d4" stroke="#879583" stroke-width="1.2"/>
+              <path d="m167 198 64 7v83l-64-8Z" fill="#eaf0e5" stroke="#a4b19a" stroke-width=".8"/>
+              <path d="m199 202 0 82m-32-46 64 8" fill="none" stroke="#a0ae95" stroke-width="1.4"/>
+              <path d="m163 283 74 9 0 8-80-10v-5Z" fill="#cad4c1"/>
+              <path d="m449 177 0 166 13 8" fill="none" stroke="#a6b29c" stroke-width="5" stroke-linejoin="round"/>
+              <path d="m451 177 0 165 13 7" fill="none" stroke="#eaf0e4" stroke-width="1.5"/>
+              <path d="m359 178 0 52m0 75v79" fill="none" stroke="#a3af99" stroke-width="4"/>
+              <path d="m341 228 36 4v67l-36-5Z" fill="#d7dfd1" stroke="#829078" stroke-width="1.2"/>
+              <ellipse cx="359" cy="255" rx="14" ry="16" fill="#eef2e9" stroke="#829078" stroke-width="1.2"/>
+              <path d="m351 253 16 2v7l-16-2Z" fill="#c4d0bb"/>
+              <path d="m346 280 25 3" stroke="#a3af99"/>
+              <g class="battery">
+                <path d="m266 270 55 7 13-7-55-7Z" fill="#ced8c5"/>
+                <path d="m321 277 13-7v105l-13 8Z" fill="#bdcbb2"/>
+                <path d="m266 270 55 7v106l-55-8Z" fill="#d8e1cf" stroke="#657956" stroke-width="1.1" stroke-dasharray="4 4"/>
+                <path d="m272 359 43 6" stroke="#a3b794"/>
+                <path d="m288 311 9 1-5 8 8 1-14 17 5-13-8-1Z" fill="none" stroke="#657956" stroke-width="1.2" stroke-linejoin="round"/>
+                <path d="M294 394v27h-95" fill="none" stroke="#657956" stroke-width=".8"/>
+                <circle cx="294" cy="392" r="2" fill="#657956"/>
+
+              </g>
+              <path d="M379 254h119v-40" fill="none" stroke="#8a9681" stroke-width=".8"/>
+              <circle cx="379" cy="254" r="2" fill="#8a9681"/>
+
+              <path d="m80 365 53-6m293 39 69 10" stroke="#aab69f" stroke-width=".8"/>
+              <path d="m97 349 4-15m-1 23 12-11m-12 11-8-7m404 32 3-22m-2 15 9-10m-9 9-7-7" fill="none" stroke="#9bac8d" stroke-width="1.2" stroke-linecap="round"/>
+            </g><g class="point-cloud" fill="#45603b"><circle cx="142" cy="163" r="2.5"/><circle cx="164" cy="167" r="2.5"/><circle cx="186" cy="171" r="2.5"/><circle cx="201" cy="170" r="2.5"/><circle cx="223" cy="174" r="2.5"/><circle cx="238" cy="173" r="2.5"/><circle cx="260" cy="177" r="2.5"/><circle cx="275" cy="181" r="2.5"/><circle cx="297" cy="180" r="2.5"/><circle cx="319" cy="184" r="2.5"/><circle cx="334" cy="183" r="2.5"/><circle cx="356" cy="187" r="2.5"/><circle cx="371" cy="191" r="2.5"/><circle cx="393" cy="190" r="2.5"/><circle cx="408" cy="194" r="2.5"/><circle cx="142" cy="183" r="2.5"/><circle cx="164" cy="182" r="2.5"/><circle cx="186" cy="186" r="2.5"/><circle cx="201" cy="190" r="2.5"/><circle cx="223" cy="189" r="2.5"/><circle cx="238" cy="193" r="2.5"/><circle cx="260" cy="192" r="2.5"/><circle cx="275" cy="196" r="2.5"/><circle cx="297" cy="200" r="2.5"/><circle cx="319" cy="199" r="2.5"/><circle cx="334" cy="203" r="2.5"/><circle cx="356" cy="202" r="2.5"/><circle cx="371" cy="206" r="2.5"/><circle cx="393" cy="210" r="2.5"/><circle cx="408" cy="209" r="2.5"/><circle cx="142" cy="198" r="2.5"/><circle cx="164" cy="202" r="2.5"/><circle cx="186" cy="201" r="2.5"/><circle cx="201" cy="205" r="2.5"/><circle cx="223" cy="209" r="2.5"/><circle cx="238" cy="208" r="2.5"/><circle cx="260" cy="212" r="2.5"/><circle cx="275" cy="211" r="2.5"/><circle cx="297" cy="215" r="2.5"/><circle cx="319" cy="219" r="2.5"/><circle cx="334" cy="218" r="2.5"/><circle cx="356" cy="222" r="2.5"/><circle cx="371" cy="221" r="2.5"/><circle cx="393" cy="225" r="2.5"/><circle cx="408" cy="229" r="2.5"/><circle cx="142" cy="218" r="2.5"/><circle cx="164" cy="217" r="2.5"/><circle cx="186" cy="221" r="2.5"/><circle cx="201" cy="220" r="2.5"/><circle cx="223" cy="224" r="2.5"/><circle cx="238" cy="228" r="2.5"/><circle cx="260" cy="227" r="2.5"/><circle cx="275" cy="231" r="2.5"/><circle cx="297" cy="230" r="2.5"/><circle cx="319" cy="234" r="2.5"/><circle cx="334" cy="238" r="2.5"/><circle cx="356" cy="237" r="2.5"/><circle cx="371" cy="241" r="2.5"/><circle cx="393" cy="240" r="2.5"/><circle cx="408" cy="244" r="2.5"/><circle cx="142" cy="233" r="2.5"/><circle cx="164" cy="237" r="2.5"/><circle cx="186" cy="236" r="2.5"/><circle cx="201" cy="240" r="2.5"/><circle cx="223" cy="239" r="2.5"/><circle cx="238" cy="243" r="2.5"/><circle cx="260" cy="247" r="2.5"/><circle cx="275" cy="246" r="2.5"/><circle cx="297" cy="250" r="2.5"/><circle cx="319" cy="249" r="2.5"/><circle cx="334" cy="253" r="2.5"/><circle cx="356" cy="257" r="2.5"/><circle cx="371" cy="256" r="2.5"/><circle cx="393" cy="260" r="2.5"/><circle cx="408" cy="259" r="2.5"/><circle cx="142" cy="248" r="2.5"/><circle cx="164" cy="252" r="2.5"/><circle cx="186" cy="256" r="2.5"/><circle cx="201" cy="255" r="2.5"/><circle cx="223" cy="259" r="2.5"/><circle cx="238" cy="258" r="2.5"/><circle cx="260" cy="262" r="2.5"/><circle cx="275" cy="266" r="2.5"/><circle cx="297" cy="265" r="2.5"/><circle cx="319" cy="269" r="2.5"/><circle cx="334" cy="268" r="2.5"/><circle cx="356" cy="272" r="2.5"/><circle cx="371" cy="276" r="2.5"/><circle cx="393" cy="275" r="2.5"/><circle cx="408" cy="279" r="2.5"/><circle cx="142" cy="268" r="2.5"/><circle cx="164" cy="267" r="2.5"/><circle cx="186" cy="271" r="2.5"/><circle cx="201" cy="275" r="2.5"/><circle cx="223" cy="274" r="2.5"/><circle cx="238" cy="278" r="2.5"/><circle cx="260" cy="277" r="2.5"/><circle cx="275" cy="281" r="2.5"/><circle cx="297" cy="285" r="2.5"/><circle cx="319" cy="284" r="2.5"/><circle cx="334" cy="288" r="2.5"/><circle cx="356" cy="287" r="2.5"/><circle cx="371" cy="291" r="2.5"/><circle cx="393" cy="295" r="2.5"/><circle cx="408" cy="294" r="2.5"/><circle cx="142" cy="283" r="2.5"/><circle cx="164" cy="287" r="2.5"/><circle cx="186" cy="286" r="2.5"/><circle cx="201" cy="290" r="2.5"/><circle cx="223" cy="294" r="2.5"/><circle cx="238" cy="293" r="2.5"/><circle cx="260" cy="297" r="2.5"/><circle cx="275" cy="296" r="2.5"/><circle cx="297" cy="300" r="2.5"/><circle cx="319" cy="304" r="2.5"/><circle cx="334" cy="303" r="2.5"/><circle cx="356" cy="307" r="2.5"/><circle cx="371" cy="306" r="2.5"/><circle cx="393" cy="310" r="2.5"/><circle cx="408" cy="314" r="2.5"/><circle cx="142" cy="303" r="2.5"/><circle cx="164" cy="302" r="2.5"/><circle cx="186" cy="306" r="2.5"/><circle cx="201" cy="305" r="2.5"/><circle cx="223" cy="309" r="2.5"/><circle cx="238" cy="313" r="2.5"/><circle cx="260" cy="312" r="2.5"/><circle cx="275" cy="316" r="2.5"/><circle cx="297" cy="315" r="2.5"/><circle cx="319" cy="319" r="2.5"/><circle cx="334" cy="323" r="2.5"/><circle cx="356" cy="322" r="2.5"/><circle cx="371" cy="326" r="2.5"/><circle cx="393" cy="325" r="2.5"/><circle cx="408" cy="329" r="2.5"/><circle cx="142" cy="318" r="2.5"/><circle cx="164" cy="322" r="2.5"/><circle cx="186" cy="321" r="2.5"/><circle cx="201" cy="325" r="2.5"/><circle cx="223" cy="324" r="2.5"/><circle cx="238" cy="328" r="2.5"/><circle cx="260" cy="332" r="2.5"/><circle cx="275" cy="331" r="2.5"/><circle cx="297" cy="335" r="2.5"/><circle cx="319" cy="334" r="2.5"/><circle cx="334" cy="338" r="2.5"/><circle cx="356" cy="342" r="2.5"/><circle cx="371" cy="341" r="2.5"/><circle cx="393" cy="345" r="2.5"/><circle cx="408" cy="344" r="2.5"/><circle cx="142" cy="333" r="2.5"/><circle cx="164" cy="337" r="2.5"/><circle cx="186" cy="341" r="2.5"/><circle cx="201" cy="340" r="2.5"/><circle cx="223" cy="344" r="2.5"/><circle cx="238" cy="343" r="2.5"/><circle cx="260" cy="347" r="2.5"/><circle cx="275" cy="351" r="2.5"/><circle cx="297" cy="350" r="2.5"/><circle cx="319" cy="354" r="2.5"/><circle cx="334" cy="353" r="2.5"/><circle cx="356" cy="357" r="2.5"/><circle cx="371" cy="361" r="2.5"/><circle cx="393" cy="360" r="2.5"/><circle cx="408" cy="364" r="2.5"/><circle cx="142" cy="353" r="2.5"/><circle cx="164" cy="352" r="2.5"/><circle cx="186" cy="356" r="2.5"/><circle cx="201" cy="360" r="2.5"/><circle cx="223" cy="359" r="2.5"/><circle cx="238" cy="363" r="2.5"/><circle cx="260" cy="362" r="2.5"/><circle cx="275" cy="366" r="2.5"/><circle cx="297" cy="370" r="2.5"/><circle cx="319" cy="369" r="2.5"/><circle cx="334" cy="373" r="2.5"/><circle cx="356" cy="372" r="2.5"/><circle cx="371" cy="376" r="2.5"/><circle cx="393" cy="380" r="2.5"/><circle cx="408" cy="379" r="2.5"/></g><g class="measure-layer" fill="none" stroke="#45603b" stroke-width="3"><path d="M142 374v18m0-9 275 37m0-9v19"/><circle cx="142" cy="383" r="4" fill="#45603b"/><circle cx="417" cy="420" r="4" fill="#45603b"/></g></svg><div class="scan-beam" aria-hidden="true"></div><div class="scan-corners" aria-hidden="true"></div></div>
+              <div class="phone-guidance"><span class="phase-copy capture-copy">Move slowly past the meter.<br>Keep the ground in view.</span><span class="phase-copy reconstruct-copy">Different angles become<br>one shared view.</span><span class="phase-copy measure-copy">Match a known distance.<br>Check another to confirm.</span><span class="phase-copy fit-copy">A candidate location.<br>Ready for a closer review.</span></div>
+              <div class="phone-home" aria-hidden="true"></div>
+            </div>
+          </div>
+          <ol class="demo-steps" aria-label="Demo stages"><li data-demo-step="capture" aria-current="step">Capture</li><li data-demo-step="reconstruct">Build</li><li data-demo-step="measure">Scale</li><li data-demo-step="fit">Fit</li></ol>
+          <div class="demo-controls"><button type="button" data-demo-play>Play demo</button><button type="button" data-demo-next>Next view</button><button type="button" data-demo-reset>Replay</button></div>
+          <figcaption><strong>Illustrated walkthrough</strong><p data-demo-status aria-live="polite">Sample house capture. This concept demo does not use your camera.</p></figcaption>
+          <noscript><p class="demo-fallback">This static illustration shows the proposed capture. Enable JavaScript to play the walkthrough.</p></noscript>
+        </figure>
+      </section>
+      <section class="purpose wrap" aria-labelledby="purpose-title"><h2 id="purpose-title">A little less<br>back and forth.</h2><p>Separate photos can show the meter, the wall, or the ground. A shared view could help a reviewer understand how they fit together. That's the idea we're testing: a clearer starting point for a home battery survey.</p></section>
+      <section class="process-section" id="how" aria-labelledby="how-title">
+        <div class="wrap">
+          <div class="section-heading"><h2 id="how-title">From your phone<br>to a useful survey.</h2><p>The first experiment follows the whole path on a saved recording. Live capture feedback is the longer-term goal illustrated above.</p></div>
+          <ol class="steps">
+            <li><svg class="large-icon" aria-hidden="true"><use href="#icon-phone"/></svg><h3><span>1.</span> Walk the space.</h3><p>Record the meter wall, the ground beside it, and a nearby corner. A slow pass from more than one angle helps show the space around windows, pipes, and other obstacles.</p></li>
+            <li><svg class="large-icon" aria-hidden="true"><use href="#icon-model"/></svg><h3><span>2.</span> Bring it together.</h3><p>Reconstruct a 3D view from the recording. A reviewer can explore the wall from different angles, with the original images available whenever a detail needs a closer look.</p></li>
+            <li><svg class="large-icon" aria-hidden="true"><use href="#icon-ruler"/></svg><h3><span>3.</span> Check the scale.</h3><p>Match a visible distance to a known measurement, then check a different distance. A model that looks right still needs to show that its dimensions are useful.</p></li>
+            <li><svg class="large-icon" aria-hidden="true"><use href="#icon-battery"/></svg><h3><span>4.</span> Consider the fit.</h3><p>Place a box with the battery's dimensions in the scene. Review the surrounding space and any missing information before recommending a location for further checks.</p></li>
+          </ol>
+        </div>
+      </section>
+      <section class="evidence wrap" aria-labelledby="evidence-title">
+        <figure class="capture-art"><img src="assets/art/phone-capture.webp" srcset="assets/art/phone-capture-800.webp 800w, assets/art/phone-capture.webp 1536w" sizes="(max-width: 760px) calc(100vw - 48px), (max-width: 1440px) 48vw, 620px" width="1536" height="1024" alt="A hand holding a phone to record an exterior meter wall and the surroundings." loading="lazy" decoding="async"><figcaption>Start with an ordinary phone. Generated concept image.</figcaption></figure>
+        <div class="evidence-copy"><h2 id="evidence-title">The wall is only<br>part of the story.</h2><p>A battery occupies real space. The nearby window, uneven ground, and route back to the meter all matter. The survey should help someone understand those relationships, even if they've never visited the home.</p>
+          <div class="evidence-point"><svg class="support-icon" aria-hidden="true"><use href="#icon-photos"/></svg><div><h3>Keep the detail.</h3><p>A 3D view gives context. Original images help with the small things, like a meter label or an obstruction that the reconstruction missed.</p></div></div>
+          <div class="evidence-point"><svg class="support-icon" aria-hidden="true"><use href="#icon-ruler"/></svg><div><h3>Make uncertainty visible.</h3><p>If a measurement doesn't hold up or part of the wall is missing, the reviewer needs to know. A convincing picture isn't enough on its own.</p></div></div>
+        </div>
+      </section>
+      <section class="inside wrap" id="inside" aria-labelledby="inside-title">
+        <div class="section-heading"><h2 id="inside-title">Start with what<br>already works.</h2><p>We're building the first experiment around existing tools, so we can focus on the question that matters: does this make a home survey easier to complete and review?</p></div>
+        <div class="inside-columns">
+          <article><h3>Video into 3D.</h3><p><a href="https://github.com/ooolabdev/ooosplat">OOOSplat</a> is our first reconstruction candidate. It takes video or images through a desktop reconstruction process and provides a viewer. The first step is trying it on an exterior wall.</p></article>
+          <article><h3>A reference for scale.</h3><p>A known measurement connects the model to the real home. A house plan could supply it if the same endpoints are visible. A separate measurement helps check where the model is reliable.</p></article>
+          <article><h3>A person's judgment.</h3><p>The model helps someone explore a location. Installation rules, electrical checks, and accurate dimensions still matter. The goal is useful evidence for the reviewer, with the limits left visible.</p></article>
+        </div>
+        <figure class="model-art"><img src="assets/art/home-model.webp" srcset="assets/art/home-model-800.webp 800w, assets/art/home-model.webp 1536w" sizes="(max-width: 760px) calc(100vw - 48px), (max-width: 1440px) calc(100vw - 128px), 1312px" width="1536" height="1024" alt="A small architectural model with a meter and a home battery beside a pale exterior wall." loading="lazy" decoding="async"><figcaption>A way to picture the goal. Generated concept image, not an approved installation.</figcaption></figure>
+      </section>
+      <section class="technical-section" id="technical" aria-labelledby="technical-title">
+        <div class="wrap">
+          <div class="section-heading"><h2 id="technical-title">What happens between<br>capture and fit.</h2><p>A closer look at the proposed pipeline. First, prove it on a saved recording. Then test how much of that process can happen while someone walks.</p></div>
+          <article class="technical-row">
+            <figure><img src="assets/art/reconstruction.webp" srcset="assets/art/reconstruction-800.webp 800w, assets/art/reconstruction.webp 1536w" sizes="(max-width: 760px) calc(100vw - 48px), (max-width: 1440px) 52vw, 690px" width="1536" height="1024" alt="Overlapping photos of a brick corner, a sparse cloud of points, and a fuller 3D view of the same wall." loading="lazy" decoding="async"><figcaption>Views of the same place, brought together. Generated illustration of the process.</figcaption></figure>
+            <div class="technical-copy"><span class="technical-number" aria-hidden="true">01</span><h3>Find the same wall<br>in different frames.</h3><p>The reconstruction starts with overlapping images. Matching details between them helps estimate where the camera was and where visible points sit in space.</p><p>Our first candidate, <a href="https://github.com/ooolabdev/ooosplat/blob/main/README_EN.md">OOOSplat</a>, combines frame preparation, COLMAP camera reconstruction, and Brush training. The result is a Gaussian splat: a scene drawn from many small, soft 3D shapes that can be viewed from different angles.</p><p class="technical-limit">That gives us a view to explore. It doesn't establish accurate dimensions or recover details the camera never saw.</p></div>
+          </article>
+          <article class="technical-row">
+            <figure><img src="assets/art/scale-study.webp" srcset="assets/art/scale-study-800.webp 800w, assets/art/scale-study.webp 1536w" sizes="(max-width: 760px) calc(100vw - 48px), (max-width: 1440px) 52vw, 690px" width="1536" height="1024" alt="An architectural wall model with physical rulers and a translucent box marking a candidate battery volume." loading="lazy" decoding="async"><figcaption>A reference distance and a possible volume. Generated study, not a clearance assessment.</figcaption></figure>
+            <div class="technical-copy"><span class="technical-number" aria-hidden="true">02</span><h3>Give the view<br>a real-world scale.</h3><p>Pick two visible endpoints with a known distance between them. A tape measurement can supply it; existing house data may work when its endpoints and accuracy can be checked.</p><p>Use that distance to scale the scene, then compare a second distance that wasn't used to set the scale. Record the error before treating any dimension as useful.</p><p>Only then place the battery's specified volume against the wall. Geometry and placement rules need their own checks, with original images and missing information available to the reviewer.</p></div>
+          </article>
+          <div class="live-plan">
+            <div><h3>Making it feel live.</h3><p>The phone needs to stay responsive while the heavier work catches up. The proposed design separates immediate guidance from background processing.</p></div>
+            <dl><div><dt>On the phone</dt><dd>Track movement, show what has been captured, and ask for a clearer or missing view.</dd></div><div><dt>In the background</dt><dd>Reconstruct new views, align them with the existing scene, and update the evidence for review.</dd></div></dl>
+          </div>
+          <p class="technical-source">This live loop is a design goal. Update speed, alignment, and measurement error still need testing. <a href="https://github.com/SamGu-NRX/house-scanning/blob/main/docs/05-live-guided-survey-hld.md">Read the system design <span aria-hidden="true">↗</span></a></p>
+        </div>
+      </section>
+      <section class="questions-section wrap" aria-labelledby="questions-title">
+        <div class="questions-intro"><h2 id="questions-title">An early idea.<br>Some honest answers.</h2><p>This is a design prototype. The phone walkthrough is an illustration of the experience we want to build. Real capture and reconstruction aren't connected here yet.</p></div>
+        <div class="questions">
+          <details><summary>Can I scan my home here?<span class="disclosure-mark" aria-hidden="true"></span></summary><p>Not yet. The next step is testing a real recording and comparing the model with measured distances and the original photos. The phone demo runs on an illustration and never opens your camera.</p></details>
+          <details><summary>Will I need a special phone?<span class="disclosure-mark" aria-hidden="true"></span></summary><p>The aim is to work with ordinary phone video. We'll test different phones and recording conditions before making compatibility claims.</p></details>
+          <details><summary>How will you know it helps?<span class="disclosure-mark" aria-hidden="true"></span></summary><p>We'll record capture effort, processing time, measurement errors, and what the reviewer still needs. We'll compare the model and images with images alone to see whether reconstruction earns its place.</p></details>
+          <details><summary>Does a possible fit mean approval?<span class="disclosure-mark" aria-hidden="true"></span></summary><p>No. A visual fit is only part of the decision. A qualified review still needs to confirm the battery model, electrical requirements, placement rules, and measurements.</p></details>
+        </div>
+      </section>
+      <section class="closing" aria-labelledby="closing-title"><div class="wrap closing-content"><svg class="closing-icon" aria-hidden="true"><use href="#icon-home"/></svg><div><h2 id="closing-title">One good look.<br>A clearer next step.</h2><p>Give the homeowner a simpler task and the reviewer a more useful picture of the home.</p><a class="button light" href="https://github.com/SamGu-NRX/house-scanning">Follow the project <span aria-hidden="true">↗</span></a></div></div></section>
+    </main>
+    <footer class="site-footer wrap"><p>House scanning</p><p>A home battery survey, taking shape.</p><a href="https://github.com/SamGu-NRX/house-scanning-landing">Site source <span aria-hidden="true">↗</span></a></footer>
+  </body>
+</html>
