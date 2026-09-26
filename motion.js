@@ -1,7 +1,9 @@
 (() => {
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const running = new Set();
-  document.addEventListener('keydown', () => {
+  document.addEventListener('keydown', (event) => {
+    if (event.metaKey || event.ctrlKey || event.altKey) return;
+    if (!['Tab', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'PageUp', 'PageDown', 'Enter', ' ', 'Home', 'End'].includes(event.key)) return;
     document.documentElement.dataset.input = 'keyboard';
     running.forEach((animation) => animation.finish());
   });

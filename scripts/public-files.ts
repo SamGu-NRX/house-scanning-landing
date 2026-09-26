@@ -1,5 +1,5 @@
 import { lstat, readdir } from "node:fs/promises";
-import { extname, join, relative, resolve } from "node:path";
+import { extname, join, relative, resolve, sep } from "node:path";
 
 export const siteRoot = resolve(import.meta.dir, "..");
 
@@ -14,7 +14,7 @@ async function assetFiles(directory: string): Promise<string[]> {
     if (entry.isDirectory()) {
       result.push(...await assetFiles(fullPath));
     } else if (entry.isFile() && publicAssetExtensions.has(extname(entry.name))) {
-      result.push(relative(siteRoot, fullPath));
+      result.push(relative(siteRoot, fullPath).split(sep).join("/"));
     }
   }
   return result;

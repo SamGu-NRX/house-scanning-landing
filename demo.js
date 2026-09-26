@@ -165,11 +165,6 @@
     if (visible && requestedPlay) { requestedPlay = false; start(); }
     root.focus({ preventScroll: true });
   });
-  document.addEventListener('keydown', () => {
-    autoplayUsed = true;
-    requestedPlay = false;
-    if (!still || playing) select(index);
-  });
   document.addEventListener('visibilitychange', () => { if (document.hidden) pause(); });
   reduced.addEventListener('change', () => { select(index); });
   render();
