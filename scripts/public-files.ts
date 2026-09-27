@@ -21,7 +21,7 @@ async function assetFiles(directory: string): Promise<string[]> {
 }
 
 export async function publicFiles(): Promise<string[]> {
-  const rootFiles = ["index.html", "styles.css", "demo.js", "motion.js"];
+  const rootFiles = ["index.html", "styles.css", "motion.js", "demo.js", "coverage.js", "story.js"];
   for (const name of rootFiles) {
     const info = await lstat(join(siteRoot, name));
     if (!info.isFile()) throw new Error(`Expected a regular public file: ${name}`);

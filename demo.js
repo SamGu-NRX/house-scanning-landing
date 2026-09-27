@@ -8,28 +8,48 @@
   };
   const SVG = 'http://www.w3.org/2000/svg';
   const playButton = required('[data-demo-play]');
+  const allButton = required('[data-demo-all]');
   const playLabel = required('[data-demo-play-label]');
   const status = required('[data-demo-status]');
-  const progress = required('[data-demo-progress]');
-  const indicator = required('[data-demo-indicator]');
+  const indicator = required('[data-step-indicator]');
   const screen = required('.phone-screen');
+  const phone = required('.phone-shell');
   const app = required('[data-app]');
 
-  // Each stage plays one window of a single scene timeline. The stage's own clock drives the
-  // progress bar; pause, replay and stage changes move the clock and the scene together.
+  // One scene timeline, cut into four stages. Everything on the phone is a paused animation over that
+  // timeline; a "shot" plays one window of it at some rate, and the step's progress bar is the shot's clock.
+  // `still` is the moment a stage is shown at when someone jumps to it without playing: the frame that
+  // states its point. Walk stops on the full coverage strip, Mark on the marked window, before the next question.
   const stages = [
-    { name: 'meter', duration: 4200, status: 'Meter. The app asks you to find your electric meter, then takes a close-up photo of it by itself.' },
-    { name: 'walk', duration: 7900, status: 'Walk. Haze lifts where the phone has seen the wall and the ground, and the strip at the bottom fills in. At the corner, you mark where the wall ends.' },
-    { name: 'mark', duration: 7000, status: 'Mark. You pin the window\'s corners, then answer what a camera can\'t tell, like what covers the ground and whether the window opens.' },
-    { name: 'placement', duration: 5000, status: 'Placement. The phone sends measurements, not photos. The example result shows a possible spot 10 ft from the meter for an installer to review.' },
+    { name: 'meter', label: 'Find the meter', duration: 4200, status: 'Step 1 of 4, find the meter. The app asks you to find your electric meter, then takes a close-up photo of it by itself.' },
+    { name: 'walk', label: 'Walk the wall', duration: 7900, still: 6800, status: 'Step 2 of 4, walk the wall. Haze lifts where the phone has seen the wall and the ground, and the strip at the bottom fills in. At the corner, you tap Wall ends here.' },
+    { name: 'mark', label: 'Mark what\'s near', duration: 7000, still: 3700, status: 'Step 3 of 4, mark what\'s near. You tap the window\'s corners, then answer what a camera can\'t tell: the ground is gravel and the window stays shut.' },
+    { name: 'placement', label: 'See a possible spot', duration: 5000, status: 'Step 4 of 4, see a possible spot. The phone sends measurements, not photos. The example result is a spot 12 ft right of the meter, for an installer to review.' },
   ];
   let total = 0;
   for (const stage of stages) { stage.start = total; total += stage.duration; }
   const TOTAL = total;
   const byName = Object.fromEntries(stages.map((stage) => [stage.name, stage]));
   const at = (name, ms) => byName[name].start + ms;
-  const stageEnd = (position) => stages[position].start + stages[position].duration - 1;
   const steps = stages.map((stage) => required(`[data-demo-step="${stage.name}"]`));
+  const bars = steps.map((step) => step.querySelector('[data-step-progress]'));
+
+  // The hero plays a shortened cut, about seventeen seconds: each shot stops once its stage's point is made,
+  // and the review questions get a short beat of their own. Selecting a step plays that stage in full.
+  // The base rates were set by eye (13.4 s in all); Sam asked for every beat to last 30% longer, so each rate
+  // is divided by CUT_SLOWER. No viewer testing is behind either number.
+  const CUT_SLOWER = 1.3;
+  const CUT = [
+    { stage: 0, from: 0, to: 3400, rate: 1.25 },
+    { stage: 1, from: 0, to: 6900, rate: 1.8 },
+    { stage: 2, from: 0, to: 3800, rate: 1.6 },
+    { stage: 2, from: 4400, to: 6800, rate: 1.6 },
+    { stage: 3, from: 900, to: 5000, rate: 1.4 },
+  ].map((shot) => ({ ...shot, rate: shot.rate / CUT_SLOWER }));
+  const whole = (position) => [{ stage: position, from: 0, to: stages[position].duration, rate: 1 }];
+  // With reduced motion, Play shows each stage's still in turn and holds it this long.
+  const STILLS = stages.map((stage, position) => whole(position)[0]);
+  const STILL_HOLD = 2600;
 
   const EASE = {
     out: 'cubic-bezier(.23, 1, .32, 1)', // the page's --ease-out: entrances and settles
@@ -72,7 +92,7 @@
   }
 
   // Coverage for one stretch of wall: when the phone first saw it, and when it saw it well.
-  // The walk only goes right, so the far left stays unseen, as the result's last notice says.
+  // The walk only goes right, so the far left stays unseen, as the result's notice says.
   function coverage(center) {
     const seen = Math.abs(center) <= 75 ? at('walk', 300) : center > 75 ? panTime(center - 75) : null;
     if (seen === null) return { seen, covered: null };
@@ -85,7 +105,8 @@
   let scene = [];
   let builtWidth = 0;
   let pt = 1;
-  let index = 0;
+  let program = CUT;
+  let shot = 0;
   let clock;
   let generation = 0;
   let playing = false;
@@ -138,6 +159,33 @@
     const idle = { backgroundColor: '#1f66f21a', color: '#1650c8' };
     track(answer, [[0, idle], [time, idle, EASE.out], [time + 150, { backgroundColor: '#1a58d6', color: '#ffffff' }]]);
     press(answer, time);
+  }
+
+  // A fingertip lands just before each tap the person makes, presses with the button, and lifts away.
+  function touches(element, taps) {
+    const place = (x, y, scale) => `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) scale(${scale})`;
+    const [, [x0, y0]] = taps[0];
+    const points = [[0, { opacity: 0, transform: place(x0, y0, 1.2) }]];
+    taps.forEach(([time, [x, y]], index) => {
+      // Two taps can be half a second apart, so a lift ends before the next finger lands.
+      const next = taps[index + 1]?.[0] ?? Infinity;
+      points.push(
+        [time - 200, { opacity: 0, transform: place(x, y, 1.2) }, EASE.out],
+        [time - 60, { opacity: 1, transform: place(x, y, 1) }, EASE.out],
+        [time + 60, { opacity: 1, transform: place(x, y, .86) }, EASE.out],
+        [time + 220, { opacity: 1, transform: place(x, y, .94) }, EASE.out],
+        [Math.min(time + 420, next - 200), { opacity: 0, transform: place(x, y, 1.08) }],
+      );
+    });
+    track(element, points);
+  }
+
+  // Layout position of an element's center inside the app, ignoring the transforms the timeline applies.
+  function centerOf(element) {
+    let x = element.offsetWidth / 2;
+    let y = element.offsetHeight / 2;
+    for (let node = element; node && node !== app; node = node.offsetParent) { x += node.offsetLeft; y += node.offsetTop; }
+    return [x, y];
   }
 
   const shift = (points) => `translate(0px, ${points * pt}px)`;
@@ -271,7 +319,8 @@
     press(required('[data-press="mark"]'), at('mark', 1700));
     ripple(required('[data-ripple="corner-a"]'), at('mark', 1700), CENTER);
     land(required('[data-pin-corner-a]'), at('mark', 1700), 'scale(.6)', EASE.pin, 450);
-    ripple(required('[data-ripple="corner-b"]'), at('mark', 3200), project(cameraKeys[cameraKeys.length - 1].slice(1, 4), [240, 215]));
+    const cornerB = project(cameraKeys[cameraKeys.length - 1].slice(1, 4), [240, 215]);
+    ripple(required('[data-ripple="corner-b"]'), at('mark', 3200), cornerB);
     land(required('[data-pin-corner-b]'), at('mark', 3200), 'scale(.6)', EASE.pin, 450);
     visibleDuring(required('[data-window-mark]'), [[at('mark', 3300), Infinity, 250]]);
     land(required('[data-tape-window]'), at('mark', 3300), 'scale(.9)', EASE.out, 200);
@@ -279,17 +328,32 @@
     // Review: the questions a camera can't answer, then "Looks complete".
     const review = required('[data-review]');
     visibleDuring(review, [[at('mark', 3800), at('placement', 300), 250]]);
-    const panel = review.querySelector('.panel');
-    track(panel, [[0, { transform: shift(24) }], [at('mark', 3800), { transform: shift(24) }, EASE.out], [at('mark', 4100), { transform: shift(0) }]]);
-    choose(required('[data-answer="gravel"]'), at('mark', 4600));
+    const sheet = review.querySelector('.panel-sheet');
+    track(sheet, [[0, { transform: shift(24) }], [at('mark', 3800), { transform: shift(24) }, EASE.out], [at('mark', 4100), { transform: shift(0) }]]);
+    const gravel = required('[data-answer="gravel"]');
+    const shut = required('[data-answer="shut"]');
+    const complete = required('[data-press="complete"]');
+    choose(gravel, at('mark', 4600));
     const content = required('[data-panel-content]');
     const row = required('[data-window-row]');
-    const room = panel.clientHeight - required('.panel-action').offsetHeight;
+    const room = sheet.clientHeight - required('.panel-action').offsetHeight;
     const scroll = Math.max(0, row.offsetTop + row.offsetHeight + 12 * pt - room);
     track(content, [[0, { transform: 'translate(0px, 0px)' }], [at('mark', 5100), { transform: 'translate(0px, 0px)' }, EASE.pan], [at('mark', 5700), { transform: `translate(0px, ${-scroll}px)` }]]);
-    choose(required('[data-answer="shut"]'), at('mark', 6100));
-    press(required('[data-press="complete"]'), at('mark', 6600));
+    choose(shut, at('mark', 6100));
+    press(complete, at('mark', 6600));
     track(required('[data-home]'), [[0, { color: CHALK }], [at('mark', 3800), { color: CHALK }, EASE.out], [at('mark', 4050), { color: INK }]]);
+
+    const [shutX, shutY] = centerOf(shut);
+    touches(required('[data-touch]'), [
+      [at('meter', 2300), centerOf(required('[data-press="meter"]'))],
+      [at('walk', 6600), centerOf(required('[data-press="end"]'))],
+      [at('walk', 7400), centerOf(required('[data-press="corner"]'))],
+      [at('mark', 1700), centerOf(required('[data-press="mark"]'))],
+      [at('mark', 3200), cornerB.map((value) => value * pt)],
+      [at('mark', 4600), centerOf(gravel)],
+      [at('mark', 6100), [shutX, shutY - scroll]],
+      [at('mark', 6600), centerOf(complete)],
+    ]);
 
     // Placement: measurements go up, then the same wall comes back as a model with a possible spot.
     visibleDuring(required('[data-upload]'), [[at('placement', 0), at('placement', 2100), 250]]);
@@ -310,7 +374,8 @@
     const open = 'skewX(0deg) scaleY(1)';
     track(required('[data-model-ground]'), [[0, { transform: folded }], [reveal + 100, { transform: folded }, EASE.out], [reveal + 800, { transform: open }]]);
     root.querySelectorAll('[data-zone]').forEach((zone, position) => visibleDuring(zone, [[reveal + 1000 + position * 150, Infinity, 400]]));
-    track(required('[data-cable]'), [[0, { strokeDashoffset: '1px' }], [reveal + 1300, { strokeDashoffset: '1px' }, EASE.pan], [reveal + 1900, { strokeDashoffset: '0px' }]]);
+    // The cable is revealed from the meter outward with a clip, which stays off the paint path.
+    track(required('[data-cable]'), [[0, { clipPath: 'inset(0 100% 0 0)' }], [reveal + 1300, { clipPath: 'inset(0 100% 0 0)' }, EASE.pan], [reveal + 1900, { clipPath: 'inset(0 0% 0 0)' }]]);
     const battery = required('[data-battery]');
     const lifted = { opacity: 0, transform: 'translate(0px, -14px)' };
     track(battery, [[0, lifted], [reveal + 1800, lifted, EASE.out], [reveal + 2200, { opacity: 1, transform: 'translate(0px, 0px)' }]]);
@@ -318,53 +383,122 @@
     track(required('[data-result-body]'), [[0, { transform: shift(12) }], [reveal, { transform: shift(12) }, EASE.out], [reveal + 400, { transform: shift(0) }]]);
   }
 
+  const current = () => program[shot];
+  const shotLength = (entry) => (still ? STILL_HOLD : (entry.to - entry.from) / entry.rate);
+  const shotStart = (entry) => stages[entry.stage].start + entry.from;
+  // The last frame a shot may show: its end, but never the stage boundary itself, because the next stage's
+  // text swaps in exactly there. Finishing, pausing and rebuilding all come back to a time no later than this.
+  const shotLast = (entry) => stages[entry.stage].start + Math.min(entry.to, stages[entry.stage].duration - 1);
+  // The frame a stage is shown at without playing, which can sit earlier than its natural end (`still`).
+  const shotEnd = (entry) => {
+    const stage = stages[entry.stage];
+    return stage.start + Math.min(entry.to, stage.still ?? stage.duration - 1);
+  };
+
   function sceneTime() {
-    return still ? stageEnd(index) : stages[index].start + Number(clock.currentTime);
+    const entry = current();
+    if (still) return shotEnd(entry);
+    if (finished) return shotLast(entry);
+    return Math.min(shotStart(entry) + Number(clock.currentTime) * entry.rate, shotLast(entry));
   }
 
   function seekScene(time) {
     scene.forEach((animation) => { animation.pause(); animation.currentTime = time; });
   }
 
+  const overview = () => program === CUT || program === STILLS;
+
+  // Play names what it will play: the whole walkthrough, or the one step someone picked. After picking a step,
+  // Watch all brings the short overview back.
   function playback() {
-    root.dataset.playing = String(playing);
-    playLabel.textContent = playing ? 'Pause walkthrough' : finished ? 'Play again' : 'Play walkthrough';
+    const control = playing ? 'pause' : finished ? 'replay' : 'play';
+    const whole = overview();
+    playButton.dataset.control = control;
+    playLabel.textContent = { pause: 'Pause', replay: whole ? 'Replay' : 'Replay step', play: whole ? 'Play' : 'Play step' }[control];
+    const verb = { pause: 'Pause', replay: 'Replay', play: 'Play' }[control];
+    playButton.setAttribute('aria-label', whole ? `${verb} walkthrough` : `${verb} step: ${stages[current().stage].label}`);
+    if (whole && document.activeElement === allButton) playButton.focus({ preventScroll: true });
+    allButton.hidden = whole;
   }
 
+  // The scene is re-seeked to the clock on every stop, so a frame that ran on past the clock never stays up.
   function pause() {
     clock.pause();
-    scene.forEach((animation) => animation.pause());
+    // pause() only takes effect on the next frame, and the clock keeps running until then. Setting its
+    // time now fixes the paused moment, so the scene below is seeked to the same one.
+    clock.currentTime = Number(clock.currentTime);
     playing = false;
+    seekScene(sceneTime());
     playback();
+  }
+
+  // The highlight behind the current step. Moving between steps, it first stretches to cover both, then
+  // releases the old one: a single shape that travels rather than a jump. Works down the list and across the bar.
+  let indicatorAt = -1;
+  const round = ([top, right, bottom, left]) => `inset(${top}px ${right}px ${bottom}px ${left}px round 16px)`;
+  function insets(clip) {
+    const values = (clip.split('round')[0].match(/-?[\d.]+px/g) ?? []).map(parseFloat);
+    if (!values.length) return null;
+    const [top, right = top, bottom = top, left = right] = values;
+    return [top, right, bottom, left];
+  }
+  function moveIndicator(position, instant = false) {
+    const item = steps[position].parentElement;
+    const target = [item.offsetTop, indicator.clientWidth - item.offsetLeft - item.offsetWidth, indicator.clientHeight - item.offsetTop - item.offsetHeight, item.offsetLeft];
+    const from = insets(getComputedStyle(indicator).clipPath);
+    indicator.getAnimations().forEach((animation) => animation.cancel());
+    indicator.style.clipPath = round(target);
+    const quiet = instant || reduced.matches || document.documentElement.dataset.input === 'keyboard';
+    if (!quiet && from && indicatorAt !== -1 && indicatorAt !== position) {
+      const bridge = target.map((value, side) => Math.min(value, from[side]));
+      indicator.animate([
+        { clipPath: round(from), easing: EASE.out },
+        { clipPath: round(bridge), offset: .45, easing: EASE.out },
+        { clipPath: round(target) },
+      ], { duration: 420 });
+    }
+    indicatorAt = position;
   }
 
   function render() {
     generation += 1;
     playing = false;
     if (clock) clock.cancel();
-    const stage = stages[index];
-    root.dataset.stage = stage.name;
-    indicator.style.transform = `translateX(${index * 100}%)`;
-    status.textContent = stage.status;
-    steps.forEach((step, position) => {
-      if (position === index) step.setAttribute('aria-current', 'step');
+    const entry = current();
+    const position = entry.stage;
+    root.dataset.stage = stages[position].name;
+    // The fingertip shows a tap in progress; a still shows where the stage ends up, so it hides.
+    root.dataset.still = String(still);
+    // The caption describes the stage on screen; it changes once per stage, so autoplay speaks four times.
+    if (status.dataset.stage !== stages[position].name) {
+      status.dataset.stage = stages[position].name;
+      status.textContent = stages[position].status;
+    }
+    steps.forEach((step, index) => {
+      if (index === position) step.setAttribute('aria-current', 'step');
       else step.removeAttribute('aria-current');
     });
-    clock = progress.animate([{ transform: still ? 'scaleX(1)' : 'scaleX(0)' }, { transform: 'scaleX(1)' }], { duration: stage.duration, fill: 'both' });
+    moveIndicator(position);
+    // Playing through, earlier steps read as done; a single step leaves the others empty.
+    const sequence = program === CUT || program === STILLS;
+    bars.forEach((bar, index) => { bar.style.transform = `scaleX(${sequence && index < position ? 1 : 0})`; });
+    const span = stages[position].duration;
+    // A still shows a full bar that does not move; with reduced motion nothing on the page slides.
+    const [from, to] = still ? [1, 1] : [entry.from / span, entry.to / span];
+    clock = bars[position].animate([{ transform: `scaleX(${from})` }, { transform: `scaleX(${to})` }], { duration: shotLength(entry), fill: 'both' });
     clock.pause();
     clock.currentTime = 0;
-    // A still stage shows its last frame; a playing stage starts where the previous one ended.
-    seekScene(still ? stageEnd(index) : stage.start);
+    seekScene(still ? shotEnd(entry) : shotStart(entry));
     const currentGeneration = generation;
     clock.finished.then(() => {
       if (currentGeneration !== generation || !playing) return;
-      if (index === stages.length - 1) {
-        finished = true;
-        pause();
-      } else {
-        index += 1;
+      if (shot < program.length - 1) {
+        shot += 1;
         render();
         start();
+      } else {
+        finished = true;
+        pause();
       }
     }).catch((error) => {
       if (error.name !== 'AbortError') throw error;
@@ -375,77 +509,100 @@
   function start() {
     // The visibility state applies to explicit Play as well as autoplay.
     if (!visible || document.hidden || playing) return;
-    if (Number(clock.currentTime) >= stages[index].duration) clock.currentTime = 0;
+    const entry = current();
+    if (Number(clock.currentTime) >= shotLength(entry)) clock.currentTime = 0;
     playing = true;
+    finished = false;
     const startTime = document.timeline.currentTime - Number(clock.currentTime);
     clock.play();
     clock.startTime = startTime;
     if (!still) {
-      const sceneStart = startTime - stages[index].start;
-      scene.forEach((animation) => { animation.play(); animation.startTime = sceneStart; });
+      const sceneStart = startTime - shotStart(entry) / entry.rate;
+      scene.forEach((animation) => { animation.playbackRate = entry.rate; animation.play(); animation.startTime = sceneStart; });
     }
     playback();
-  }
-
-  function select(position, staticView = true) {
-    pause();
-    requestedPlay = false;
-    index = position;
-    finished = false;
-    still = staticView || reduced.matches;
-    render();
   }
 
   function playInView() {
     requestedPlay = true;
     if (visible) { requestedPlay = false; start(); }
-    else root.scrollIntoView({ block: 'start' });
+    else phone.scrollIntoView({ block: 'center', behavior: reduced.matches ? 'auto' : 'smooth' });
+  }
+
+  // A pointer choice plays that step in full. A keyboard choice, or reduced motion, shows its last frame at once.
+  function select(position, animate) {
+    pause();
+    requestedPlay = false;
+    program = whole(position);
+    shot = 0;
+    finished = false;
+    still = !animate || reduced.matches;
+    render();
+    if (still) clock.currentTime = shotLength(current());
+    else playInView();
   }
 
   // Sizes in the scene follow the phone's width, so a resized phone gets a rebuilt timeline at the same moment.
   function rebuild() {
+    moveIndicator(current().stage, true);
     if (Math.abs(screen.clientWidth - builtWidth) < .5) return;
     const time = sceneTime();
     buildScene();
     seekScene(time);
     if (playing && !still) {
-      const sceneStart = clock.startTime - stages[index].start;
-      scene.forEach((animation) => { animation.play(); animation.startTime = sceneStart; });
+      const entry = current();
+      const sceneStart = clock.startTime - shotStart(entry) / entry.rate;
+      scene.forEach((animation) => { animation.playbackRate = entry.rate; animation.play(); animation.startTime = sceneStart; });
     }
   }
 
-  playButton.addEventListener('click', (event) => {
+  allButton.addEventListener('click', () => {
     autoplayUsed = true;
-    if (playing) { pause(); return; }
-    const wantsStill = event.detail === 0 || reduced.matches;
-    if (finished) select(0, wantsStill);
-    else if (still !== wantsStill || Number(clock.currentTime) >= stages[index].duration) select(index, wantsStill);
+    pause();
+    program = reduced.matches ? STILLS : CUT;
+    shot = 0;
+    still = reduced.matches;
+    finished = false;
+    render();
     playInView();
   });
-  steps.forEach((step, position) => step.addEventListener('click', () => {
+  playButton.addEventListener('click', () => {
     autoplayUsed = true;
-    select(position);
+    if (playing) { pause(); return; }
+    if (reduced.matches) {
+      // Without motion, Play shows each stage's still in turn.
+      if (program !== STILLS || finished) { program = STILLS; shot = 0; }
+      still = true;
+      finished = false;
+      render();
+    } else if (finished || still) {
+      if (finished) shot = 0;
+      if (program === STILLS) { program = CUT; shot = 0; }
+      still = false;
+      finished = false;
+      render();
+    }
+    playInView();
+  });
+  steps.forEach((step, position) => step.addEventListener('click', (event) => {
+    autoplayUsed = true;
+    select(position, event.detail > 0);
   }));
-  required('[data-demo-reset]').addEventListener('click', (event) => {
-    autoplayUsed = true;
-    select(0, event.detail === 0 || reduced.matches);
-    if (!reduced.matches) playInView();
+  document.addEventListener('visibilitychange', () => { if (document.hidden && playing) pause(); });
+  // Turning reduced motion on freezes the current stage on its still. Turning it off leaves the page as it is
+  // until the next Play, rather than cutting a stage short.
+  reduced.addEventListener('change', () => {
+    if (reduced.matches) select(current().stage, false);
+    else if (!playing) still = true;
   });
-  document.querySelector('[data-watch-demo]')?.addEventListener('click', (event) => {
-    autoplayUsed = true;
-    select(0, event.detail === 0 || reduced.matches);
-    requestedPlay = !reduced.matches;
-    if (visible && requestedPlay) { requestedPlay = false; start(); }
-    root.focus({ preventScroll: true });
-  });
-  document.addEventListener('visibilitychange', () => { if (document.hidden) pause(); });
-  reduced.addEventListener('change', () => { select(index); });
 
+  // The steps are inert in the markup, so they neither focus nor pretend to work without JavaScript.
+  steps.forEach((step) => { step.disabled = false; });
   drawOnce();
   buildScene();
   render();
   new ResizeObserver(() => requestAnimationFrame(rebuild)).observe(screen);
-  const phone = required('.phone-shell');
+  new ResizeObserver(() => moveIndicator(current().stage, true)).observe(indicator);
   let observer;
   function observePhone() {
     observer?.disconnect();
@@ -454,14 +611,13 @@
     const threshold = Math.min(.5, innerHeight / (2 * phone.getBoundingClientRect().height));
     observer = new IntersectionObserver(([entry]) => {
       visible = entry.isIntersecting && entry.intersectionRatio >= threshold;
-      if (!visible) { pause(); return; }
+      if (!visible) { if (playing) pause(); return; }
       if (requestedPlay && !document.hidden) { requestedPlay = false; start(); }
       if (!autoplayUsed && !reduced.matches && !document.hidden) {
         autoplayUsed = true;
         start();
       }
     }, { threshold: [0, threshold] });
-    // The explanation underneath need not be on screen.
     observer.observe(phone);
   }
   observePhone();

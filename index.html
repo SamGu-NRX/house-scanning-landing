@@ -4,24 +4,21 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="theme-color" content="#f5f6f2">
-    <meta name="description" content="An iPhone scan of the wall around your electric meter, designed to suggest a possible home battery spot for an installer to review. See an illustrated walkthrough.">
-    <title>House scanning · A clearer picture of home</title>
+    <meta name="description" content="A home battery survey from your iPhone. Walk the wall around your electric meter; the app measures it and suggests a possible spot for an installer to check.">
+    <title>House scanning · A home battery survey from your iPhone</title>
     <link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+    <link rel="preload" href="assets/fonts/familjen-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="styles.css">
-    <noscript><style>.demo-steps, .demo-controls { display: none; }</style></noscript>
-    <script src="demo.js" defer></script>
+    <noscript><style>.demo-controls, .film-replay, .step-progress, .step-indicator, .unseen-range, .unseen-grip, .unseen-divider, .unseen-haze, .layer-details { display: none !important; } .step:disabled { cursor: default; opacity: 1; }</style></noscript>
     <script src="motion.js" defer></script>
+    <script src="demo.js" defer></script>
+    <script src="coverage.js" defer></script>
+    <script src="story.js" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
     <svg class="icon-definitions" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <symbol id="icon-home" viewBox="0 0 160 160"><path d="M13 71 80 17l67 54-13 16-54-43-54 43Z" fill="currentColor"/><path d="M34 81 80 44l46 37v63H94v-44H66v44H34Z" fill="currentColor"/></symbol>
-      <symbol id="icon-phone" viewBox="0 0 160 160"><rect x="37" y="9" width="86" height="142" rx="19" fill="currentColor"/><rect x="46" y="19" width="68" height="113" rx="11" fill="var(--icon-light)"/><rect x="66" y="24" width="28" height="7" rx="3.5" fill="currentColor"/><path d="m54 78 26-23 26 23v40H54Z" fill="var(--icon-mid)"/><path d="M73 90h15v28H73Z" fill="var(--icon-light)"/><circle cx="80" cy="142" r="4" fill="var(--icon-light)"/></symbol>
-      <symbol id="icon-model" viewBox="0 0 160 160"><path d="m80 8 66 37-66 38-66-38Z" fill="var(--icon-mid)"/><path d="m14 55 61 35v62L14 117Z" fill="currentColor"/><path d="m85 90 61-35v62l-61 35Z" fill="var(--icon-soft)"/></symbol>
-      <symbol id="icon-ruler" viewBox="0 0 160 160"><path d="M20 14h45v80h81v46H20Z" fill="currentColor"/><path d="M46 28h19v6H46zm7 19h12v6H53zm-7 19h19v6H46zm34 28h6v20h-6zm21 0h6v12h-6zm21 0h6v20h-6Z" fill="var(--icon-light)"/><path d="m82 28 38 38m-3-28 3 28-28-3" fill="none" stroke="var(--icon-soft)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-      <symbol id="icon-battery" viewBox="0 0 160 160"><rect x="40" y="17" width="80" height="137" rx="12" fill="currentColor"/><rect x="64" y="5" width="32" height="18" rx="5" fill="currentColor"/><path d="M87 44 60 88h20l-9 37 31-51H82Z" fill="var(--icon-light)"/></symbol>
-      <symbol id="icon-photos" viewBox="0 0 160 160"><rect x="14" y="34" width="111" height="108" rx="12" fill="var(--icon-mid)"/><rect x="34" y="14" width="112" height="110" rx="12" fill="currentColor"/><path d="m47 105 28-34 18 19 18-28 22 43Z" fill="var(--icon-light)"/><circle cx="66" cy="47" r="12" fill="var(--icon-light)"/></symbol>
-
+      <symbol id="mark" viewBox="0 0 32 32"><rect x="7" y="2.5" width="18" height="27" rx="5.5" fill="currentColor"/><circle cx="16" cy="12.5" r="6" fill="var(--paper)"/><path d="m16 12.5 3.2-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><rect x="11" y="22" width="10" height="2.6" rx="1.3" fill="var(--paper)"/></symbol>
       <!-- Small glyphs for the drawn app screens, on a 24-unit grid. They stand in for the SF Symbols the app uses. -->
       <symbol id="g-camera" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M8.7 4h6.6l1.6 2.4H20a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8.4a2 2 0 0 1 2-2h3.1Zm3.3 5.1a3.9 3.9 0 1 0 0 7.8 3.9 3.9 0 0 0 0-7.8Z"/></symbol>
       <symbol id="g-pin" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M12 2.2a5.6 5.6 0 0 0-5.6 5.6c0 3.9 4.5 8.3 5 8.8a.8.8 0 0 0 1.2 0c.5-.5 5-4.9 5-8.8A5.6 5.6 0 0 0 12 2.2Zm0 3.4a2.2 2.2 0 1 1 0 4.4 2.2 2.2 0 0 1 0-4.4Z"/><path d="M7.8 15.3C4.8 15.9 3 17 3 18.2c0 1.8 4 3.2 9 3.2s9-1.4 9-3.2c0-1.2-1.8-2.3-4.8-2.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
@@ -35,7 +32,8 @@
       <symbol id="g-ruler" viewBox="0 0 24 24"><path d="m2.8 16.2 13.4-13.4 5 5L7.8 21.2Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m7.7 11.3 2 2m1.2-5.2 2.8 2.8m.4-6 2 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
       <symbol id="g-review" viewBox="0 0 24 24"><circle cx="9" cy="7" r="4" fill="currentColor"/><path fill="currentColor" d="M1.5 20.5c0-4.2 3.4-7 7.5-7s7.5 2.8 7.5 7Z"/><path d="M16.8 5.2a2.6 2.6 0 1 1 3.6 2.4c-.8.4-1.1.9-1.1 1.8" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/><circle cx="19.3" cy="12.6" r="1.2" fill="currentColor"/></symbol>
       <symbol id="g-info" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-1.2 8.4v7.2h2.4v-7.2Zm1.2-4.3a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z"/></symbol>
-      <symbol id="g-half-seen" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 0 0 18Z"/></symbol>
+      <symbol id="g-sides" viewBox="0 0 24 24"><path d="M3.5 12h17M8 7.5 3.5 12 8 16.5m8-9 4.5 4.5-4.5 4.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="g-panel" viewBox="0 0 24 24"><path fill="currentColor" d="M11.2 1.5 3 12.4h5.6L7.5 20.8l6.3-8H9.7l1.5-11.3Z"/><circle cx="17.6" cy="17.4" r="5.4" fill="currentColor"/><path d="m15.2 17.5 1.7 1.7 3.1-3.3" fill="none" stroke="#f2f1ec" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
       <symbol id="g-viewfinder" viewBox="0 0 24 24"><path d="M3 8V5a2 2 0 0 1 2-2h3m8 0h3a2 2 0 0 1 2 2v3m0 8v3a2 2 0 0 1-2 2h-3m-8 0H5a2 2 0 0 1-2-2v-3" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path fill="currentColor" fill-rule="evenodd" d="M10 7.8h4l1 1.4h1.7a1.3 1.3 0 0 1 1.3 1.3v4.8a1.3 1.3 0 0 1-1.3 1.3H7.3A1.3 1.3 0 0 1 6 15.3v-4.8a1.3 1.3 0 0 1 1.3-1.3H9Zm2 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"/></symbol>
       <symbol id="g-trash" viewBox="0 0 24 24"><path d="M4 6.5h16M9.5 6.5V4h5v2.5M6.5 6.5l1 14h9l1-14" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></symbol>
 
@@ -99,6 +97,27 @@
           <stop offset="0" stop-color="#DCE6F2"/>
           <stop offset="1" stop-color="#F2F1EC"/>
         </linearGradient>
+        <!-- Light from the upper left. Cast shadows are hard-edged offsets (sunlight), so the animated phone view
+             stays free of filters; the gradients only add shading and contact darkening. -->
+        <linearGradient id="wall-light" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity=".1"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#3b3526" stop-opacity=".05"/></linearGradient>
+        <linearGradient id="base-ao" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b3526" stop-opacity="0"/><stop offset="1" stop-color="#3b3526" stop-opacity=".1"/></linearGradient>
+        <linearGradient id="ground-ao" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b3526" stop-opacity=".26"/><stop offset="1" stop-color="#3b3526" stop-opacity="0"/></linearGradient>
+        <linearGradient id="foundation" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C4C1B8"/><stop offset="1" stop-color="#ADAAA1"/></linearGradient>
+        <radialGradient id="leaf-dark" cx=".34" cy=".3" r=".78"><stop offset="0" stop-color="#86a071"/><stop offset=".62" stop-color="#688060"/><stop offset="1" stop-color="#4f6446"/></radialGradient>
+        <radialGradient id="leaf-light" cx=".34" cy=".3" r=".78"><stop offset="0" stop-color="#a6bb8e"/><stop offset=".66" stop-color="#7d9468"/><stop offset="1" stop-color="#627852"/></radialGradient>
+        <radialGradient id="reel-coil" cx=".38" cy=".34" r=".7"><stop offset="0" stop-color="#6f9a66"/><stop offset=".7" stop-color="#4c7847"/><stop offset="1" stop-color="#3b6137"/></radialGradient>
+        <!-- The shrub left of the meter. Its own id, so the unseen-ground study can draw it again over the candidate spot. -->
+        <g id="shrub-left">
+          <ellipse cx="-160" cy="3" rx="72" ry="8" fill="#3b3526" fill-opacity=".24"/>
+          <circle cx="-196" cy="-26" r="26" fill="url(#leaf-dark)"/>
+          <circle cx="-128" cy="-35" r="28" fill="url(#leaf-dark)"/>
+          <circle cx="-190" cy="-42" r="30" fill="url(#leaf-light)"/>
+          <circle cx="-138" cy="-49" r="22" fill="url(#leaf-light)"/>
+          <circle cx="-160" cy="-56" r="34" fill="url(#leaf-light)"/>
+          <ellipse cx="-160" cy="-9" rx="62" ry="10" fill="#3f5236" fill-opacity=".32"/>
+          <path d="M-206 -30q6-5 12 0m24-10q6-5 12 0m13 18q6-5 12 0m-50-38q5-4 10 0m45 8q5-4 10 0m-40 22q6-5 12 0m-58 6q5-4 10 0m78-40q5-4 10 0" fill="none" stroke="#4a5e40" stroke-opacity=".38" stroke-width="2" stroke-linecap="round"/>
+          <g fill="#b9cca2"><circle cx="-174" cy="-74" r="11" opacity=".55"/><circle cx="-203" cy="-55" r="8" opacity=".45"/><circle cx="-146" cy="-66" r="7" opacity=".45"/></g>
+        </g>
         <clipPath id="window-glass">
           <rect x="144" y="-211" width="92" height="50"/>
           <rect x="144" y="-156" width="92" height="47"/>
@@ -128,13 +147,17 @@
           </g>
           <rect x="-420" y="-270" width="870" height="242" fill="url(#siding)"/>
           <rect x="-420" y="-270" width="870" height="34" fill="url(#eave-shade)"/>
-          <rect x="-420" y="-28" width="870" height="28" fill="#B9B6AD"/>
+          <rect x="-420" y="-270" width="870" height="242" fill="url(#wall-light)"/>
+          <rect x="-420" y="-40" width="870" height="12" fill="url(#base-ao)"/>
+          <rect x="-420" y="-28" width="870" height="28" fill="url(#foundation)"/>
+          <rect x="-420" y="-28" width="870" height="1.2" fill="#D3D0C7"/>
           <rect x="-420" y="-28" width="870" height="3" fill="#A4A198"/>
           <g class="corner-board">
             <rect x="436" y="-270" width="14" height="242" fill="#F1EEE6"/>
             <rect x="436" y="-270" width="2" height="242" fill="#D6D1C4"/>
           </g>
           <g class="window">
+            <path d="M248 -222h6v125h-124v-4h118Z" fill="#3b3526" fill-opacity=".1"/>
             <rect x="126" y="-231" width="128" height="7" rx="1" fill="#F6F4EE"/>
             <rect x="130" y="-224" width="120" height="2.5" fill="#D6D1C4"/>
             <rect x="132" y="-222" width="116" height="121" fill="#F1EEE6"/>
@@ -153,6 +176,8 @@
             <rect x="126" y="-95" width="128" height="5" fill="#574F3A" opacity=".14"/>
           </g>
           <g class="meter">
+            <path d="M15.5 -157h5v44h-31v-4h26Z" fill="#3b3526" fill-opacity=".14"/>
+            <rect x="2.6" y="-117" width="3" height="117" fill="#3b3526" fill-opacity=".09"/>
             <path d="M9 -117V-2" fill="none" stroke="#A8744A" stroke-width=".7"/>
             <rect x="-2.6" y="-117" width="5.2" height="117" fill="#A0A6AC"/>
             <rect x=".8" y="-117" width="1.8" height="117" fill="#8A9097"/>
@@ -176,10 +201,16 @@
             <path d="M-5.6 -144.4a7 7 0 0 1 6.2-3.2" fill="none" stroke="#fff" stroke-width="1.1" stroke-linecap="round" opacity=".85"/>
           </g>
           <g class="hose">
-            <rect x="-92" y="-104" width="16" height="4" rx="1" fill="#5E645C"/>
-            <g fill="none" stroke="#4F7A4A" stroke-width="2.2"><ellipse cx="-84" cy="-86" rx="12" ry="15"/><ellipse cx="-83" cy="-85" rx="13" ry="16"/><ellipse cx="-85" cy="-84" rx="12.5" ry="15.5"/></g>
-            <ellipse cx="-84" cy="-86" rx="12" ry="15" fill="none" stroke="#72A06A" stroke-width=".7"/>
-            <path d="M-43.4 -48.8c6 2-4 16-18 14s-19-14-21-21" fill="none" stroke="#4F7A4A" stroke-width="2.2"/>
+            <circle cx="-80" cy="-81" r="16.5" fill="#3b3526" fill-opacity=".09"/>
+            <rect x="-95" y="-106" width="22" height="6" rx="1.5" fill="#656b63"/>
+            <rect x="-95" y="-106" width="22" height="1.4" rx=".7" fill="#8b9189"/>
+            <circle cx="-84" cy="-86" r="16.5" fill="url(#reel-coil)"/>
+            <g fill="none" stroke-linecap="round"><circle cx="-84" cy="-86" r="14.2" stroke="#3c6338" stroke-width="1.1"/><circle cx="-84" cy="-86" r="11.6" stroke="#3c6338" stroke-width="1.1"/><path d="M-97 -93a14.5 14.5 0 0 1 11-7.5m-8 5a11.8 11.8 0 0 1 7-4" stroke="#9cc491" stroke-width="1.3" opacity=".8"/></g>
+            <circle cx="-84" cy="-86" r="6.4" fill="#7c8179"/>
+            <circle cx="-84" cy="-86" r="3" fill="#565b54"/>
+            <path d="M-88.5 -89.5a5 5 0 0 1 4-2" fill="none" stroke="#b5bab2" stroke-width="1" stroke-linecap="round"/>
+            <path d="M-43.4 -48.8c6 2-4 16-18 14s-19-14-21-21" fill="none" stroke="#3f6a3b" stroke-width="2.6" stroke-linecap="round"/>
+            <path d="M-45 -47.6c3 2-5 12-16.5 10.5" fill="none" stroke="#8fb884" stroke-width=".8" stroke-linecap="round" opacity=".8"/>
             <circle cx="-48" cy="-58" r="3" fill="#B08D57"/>
             <rect x="-49" y="-65" width="2" height="5" fill="#8E6F40"/>
             <ellipse cx="-48" cy="-65.6" rx="3.2" ry="1.1" fill="#9E3B30"/>
@@ -187,6 +218,7 @@
           </g>
           <g class="downspout">
             <rect x="417" y="-322" width="14" height="10" rx="2" fill="#E3DFD5"/>
+            <rect x="429" y="-310" width="5" height="294" fill="#3b3526" fill-opacity=".1"/>
             <rect x="419" y="-314" width="10" height="298" fill="#E6E2D8"/>
             <rect x="426" y="-314" width="3" height="298" fill="#CFCABE"/>
             <rect x="417" y="-236" width="14" height="3" rx="1" fill="#C9C4B8"/>
@@ -203,15 +235,9 @@
           <rect x="-420" width="870" height="34" fill="url(#gravel)"/>
           <rect x="-420" y="33" width="870" height="2.4" fill="#6F6B60"/>
           <rect x="-420" width="870" height="3" fill="#8F8A7E"/>
+          <rect x="-420" y="3" width="870" height="9" fill="url(#ground-ao)"/>
           <path d="M424 2h34l2 7h-38Z" fill="#C4C0B6"/>
-          <g class="shrub">
-            <circle cx="-196" cy="-26" r="26" fill="#5B6F4D"/>
-            <circle cx="-190" cy="-40" r="30" fill="#6F8560"/>
-            <circle cx="-160" cy="-54" r="34" fill="#6F8560"/>
-            <circle cx="-128" cy="-36" r="28" fill="#657B57"/>
-            <circle cx="-166" cy="-66" r="16" fill="#839870"/>
-            <circle cx="-136" cy="-50" r="11" fill="#839870"/>
-          </g>
+          <use href="#shrub-left"/>
           <g class="shrub">
             <circle cx="486" cy="-20" r="20" fill="#657B57"/>
             <circle cx="508" cy="-28" r="24" fill="#6F8560"/>
@@ -219,20 +245,77 @@
             <circle cx="504" cy="-40" r="10" fill="#839870"/>
           </g>
         </g>
+        <!-- The walk seen from outside (the wide figure and the unseen-ground study). World units are centimeters, as above. -->
+        <pattern id="haze-hatch" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+          <rect width="14" height="14" fill="#f5f6f2" fill-opacity=".84"/>
+          <rect width="2" height="14" fill="#293b30" fill-opacity=".1"/>
+        </pattern>
+        <linearGradient id="haze-fade-in" x1="0" x2="1"><stop offset="0" stop-color="#f5f6f2" stop-opacity="0"/><stop offset="1" stop-color="#f5f6f2" stop-opacity=".84"/></linearGradient>
+        <linearGradient id="haze-fade-out" x1="0" x2="1"><stop offset="0" stop-color="#f5f6f2" stop-opacity=".84"/><stop offset="1" stop-color="#f5f6f2" stop-opacity="0"/></linearGradient>
+        <g id="film-world"><rect x="-460" y="-460" width="1600" height="760" fill="#E6EBEE"/><use href="#far-yard"/><use href="#meter-wall"/><use href="#yard"/></g>
+        <!-- The walk starts at the meter and goes right, so it never sees more than 75 cm left of the meter. -->
+        <g id="haze-left"><rect x="-470" y="-360" width="355" height="420" fill="url(#haze-hatch)"/><rect x="-115" y="-360" width="40" height="420" fill="url(#haze-fade-out)"/></g>
+        <g id="haze-right"><rect x="75" y="-360" width="40" height="420" fill="url(#haze-fade-in)"/><rect x="115" y="-360" width="1000" height="420" fill="url(#haze-hatch)"/></g>
+        <!-- Stack and server drawings. Light comes from the upper left; shadows fall down and slightly right. -->
+        <radialGradient id="art-stage" cx=".42" cy=".28" r=".95"><stop offset="0" stop-color="#f6f8f3"/><stop offset=".6" stop-color="#e9eee4"/><stop offset="1" stop-color="#dfe6d8"/></radialGradient>
+        <filter id="lift" x="-25%" y="-25%" width="150%" height="160%" color-interpolation-filters="sRGB"><feDropShadow dx="1" dy="4" stdDeviation="3.5" flood-color="#1f2d24" flood-opacity=".22"/></filter>
+        <filter id="lift-tight" x="-20%" y="-20%" width="140%" height="150%" color-interpolation-filters="sRGB"><feDropShadow dx=".5" dy="1.5" stdDeviation="1.2" flood-color="#1f2d24" flood-opacity=".28"/></filter>
+        <filter id="soft-blur" x="-30%" y="-100%" width="160%" height="300%"><feGaussianBlur stdDeviation="5"/></filter>
+        <linearGradient id="dark-card" x1="0" y1="0" x2=".4" y2="1"><stop offset="0" stop-color="#2d3d33"/><stop offset="1" stop-color="#1b2620"/></linearGradient>
+        <linearGradient id="print-sheen" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".32"/><stop offset=".42" stop-color="#fff" stop-opacity="0"/></linearGradient>
+        <linearGradient id="iso-wall" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ebe6d9"/><stop offset="1" stop-color="#d3ccbb"/></linearGradient>
+        <linearGradient id="iso-glass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c3d2de"/><stop offset=".55" stop-color="#94a8bb"/><stop offset="1" stop-color="#7d92a6"/></linearGradient>
+        <linearGradient id="iso-seen" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#cdd9c0"/><stop offset="1" stop-color="#b8c8a8"/></linearGradient>
+        <linearGradient id="bat-front" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#e7eae4"/></linearGradient>
+        <linearGradient id="phone-body" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3a4a40"/><stop offset=".5" stop-color="#26332b"/><stop offset="1" stop-color="#18211c"/></linearGradient>
+        <pattern id="iso-haze" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="#f5f6f2"/><rect width="1.2" height="6" fill="#293b30" fill-opacity=".14"/></pattern>
+        <!-- The depth and mesh layers, drawn once in a sheet's 240 × 150 frame (the camera layer's framing, at half scale). -->
+        <linearGradient id="depth-wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4c6a53"/><stop offset="1" stop-color="#5f7e65"/></linearGradient>
+        <radialGradient id="depth-near" cx=".5" cy=".4" r=".6"><stop offset="0" stop-color="#e2ecd8"/><stop offset="1" stop-color="#bfd2b1"/></radialGradient>
+        <g id="layer-depth-art">
+          <rect width="240" height="150" fill="url(#depth-wall)"/>
+          <rect width="240" height="15" fill="#88a585"/>
+          <rect y="15" width="240" height="5" fill="#3e5a46" opacity=".55"/>
+          <rect x="137" y="34.5" width="66" height="70.5" rx="1" fill="#6b8a6f"/>
+          <rect x="147" y="44.5" width="46" height="51" fill="#34503f"/>
+          <path d="M150 50h9M170 62h12M154 80h7M176 88h9" stroke="#4d6b56" stroke-width="2" stroke-linecap="round"/>
+          <rect x="136" y="99.5" width="68" height="3.5" rx="1" fill="#86a383"/>
+          <rect x="73.7" y="91.5" width="2.6" height="58.5" fill="#7a987a"/>
+          <rect x="67.2" y="69" width="15.6" height="22.5" rx="1.6" fill="#8aa889"/>
+          <circle cx="75" cy="80" r="5.2" fill="#9cb899"/>
+          <ellipse cx="33" cy="107" rx="6.6" ry="8" fill="#a3bf9e"/>
+          <path d="M34 115c6 3 14 8 19 16" fill="none" stroke="#a3bf9e" stroke-width="2.4" stroke-linecap="round"/>
+          <rect y="136" width="240" height="14" fill="#6d8c70"/>
+          <g fill="url(#depth-near)"><circle cx="-5" cy="123" r="17"/><circle cx="11" cy="132" r="14"/><circle cx="-20" cy="130" r="15"/><circle cx="-8" cy="117" r="8"/><circle cx="7" cy="125" r="6"/></g>
+        </g>
+        <pattern id="mesh-lattice" width="20" height="16" patternUnits="userSpaceOnUse"><path d="M0 0H20M0 0 10 16 20 0M0 16H20" fill="none" stroke="#293b30" stroke-opacity=".42" stroke-width=".9"/></pattern>
+        <g id="layer-mesh-art">
+          <rect width="240" height="150" fill="#dcd4c2"/>
+          <rect width="240" height="15" fill="#e6e1d4"/>
+          <rect x="137" y="34.5" width="66" height="70.5" fill="#a7bccc"/>
+          <rect x="66" y="68" width="18" height="24" fill="#b9bdc2"/>
+          <rect y="136" width="240" height="14" fill="#a9ba92"/>
+          <rect width="240" height="150" fill="url(#mesh-lattice)"/>
+          <path d="M0 15H240M137 34.5h66v70.5h-66ZM66 68h18v24H66ZM0 136H240" fill="none" stroke="#293b30" stroke-opacity=".7" stroke-width="1.3"/>
+        </g>
+        <g id="viewfinder">
+          <rect x="-70" y="-262" width="140" height="286" rx="6" fill="#fff" fill-opacity=".12"/>
+          <path d="M-70 -230v-32h32M38 -262h32v32M70 -8v32H38M-38 24h-32v-32" fill="none" stroke="#000" stroke-opacity=".28" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M-70 -230v-32h32M38 -262h32v32M70 -8v32H38M-38 24h-32v-32" fill="none" stroke="#fff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
       </defs>
     </svg>
     <header class="site-header wrap">
-      <a class="wordmark" href="#" aria-label="House scanning home"><svg width="38" height="38" aria-hidden="true"><use href="#icon-home"/></svg><span>House scanning</span></a>
-      <nav aria-label="Main navigation"><a href="#how">How it works</a><a href="#technical">The technical idea</a><a class="project-link" href="https://github.com/SamGu-NRX/house-scanning-master" rel="noopener">GitHub</a></nav>
+      <a class="wordmark" href="#main" aria-label="House scanning, top of page"><svg width="30" height="30" aria-hidden="true"><use href="#mark"/></svg><span>House scanning</span></a>
+      <nav aria-label="Main"><a href="#how">How it works</a><a href="https://house-scanning-briefing.vercel.app/" rel="noopener">Briefing</a><a class="nav-pill" href="https://github.com/SamGu-NRX/house-scanning-master" rel="noopener">GitHub</a></nav>
     </header>
     <main id="main" tabindex="-1">
-      <section class="hero wrap" aria-labelledby="hero-title">
+      <section class="hero wrap" data-demo aria-labelledby="hero-title">
         <div class="hero-copy">
-          <h1 id="hero-title">A clearer picture<br>of home.</h1>
-          <p class="hero-description">We're designing an iPhone scan of the wall around your electric meter. It shows what the phone has seen, asks about what a camera can't tell, and suggests a possible spot for a home battery that an installer then reviews.</p>
-          <div class="hero-actions"><a class="button play-cta" href="#demo" data-watch-demo><svg class="play-glyph" width="11" height="12" viewBox="0 0 11 12" aria-hidden="true"><path d="M1 .8c0-.6.7-1 1.2-.7l8.1 5.2c.5.3.5 1 0 1.4L2.2 11.9c-.5.3-1.2 0-1.2-.7Z"/></svg>Play the walkthrough</a><a class="text-link" href="#how">How it works</a></div>
+          <h1 id="hero-title"><span>A home battery survey.</span> <span>From your iPhone.</span></h1>
+          <p class="lede">Walk the wall around your electric meter with an iPhone. The app measures it, and an installer checks the spot it suggests.</p>
         </div>
-        <figure class="phone-demo" id="demo" data-demo data-stage="meter" data-playing="false" tabindex="-1" aria-label="Illustrated phone walkthrough of the survey">
+        <figure class="phone-demo" id="demo" aria-label="Illustrated walkthrough of the iPhone survey">
           <div class="phone-shell">
             <div class="phone-screen">
               <div class="app" data-app aria-hidden="true">
@@ -324,7 +407,7 @@
 
                 <!-- "Anything else near your meter?": a light panel over the dimmed camera. -->
                 <div class="review" data-review>
-                  <div class="panel">
+                  <div class="panel-sheet">
                     <div class="panel-content" data-panel-content>
                       <div class="soft-card">
                         <p class="question">What's on the ground along this wall?</p>
@@ -359,7 +442,7 @@
                       <g class="model-ground" data-model-ground>
                         <path d="M-180 0H500L415 75H-265Z" fill="#6F7F5E"/>
                         <path class="zone" data-zone d="M-130 0H-30L-64 30H-164Z" fill="#F5B53D" fill-opacity=".6"/>
-                        <path class="zone" data-zone d="M246 0H364L330 30H212Z" fill="#2FC273" fill-opacity=".6"/>
+                        <path class="zone" data-zone d="M322 0H440L406 30H288Z" fill="#2FC273" fill-opacity=".6"/>
                       </g>
                       <path d="M-130 -270H450L454.1 -273.6H-125.9Z" fill="#EEE6D8"/>
                       <path d="M450 -270 454.1 -273.6V-3.6L450 0Z" fill="#CDBFA8"/>
@@ -372,26 +455,27 @@
                         <circle cx="-5.1" cy="-135.5" r="7" fill="#1F66F2"/>
                       </g>
                       <g class="photo-wall" data-photo-wall clip-path="url(#diorama-wall)"><use href="#meter-wall"/></g>
-                      <path class="cable" data-cable d="M-.7 -117.4V-49.4H304.3" pathLength="1" fill="none" stroke="#1F66F2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                      <g class="battery" data-battery>
+                      <path class="cable" data-cable d="M-.7 -117.4V-49.4H380.3" fill="none" stroke="#1F66F2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                      <g transform="translate(76 0)"><g class="battery" data-battery>
                         <ellipse cx="300" cy="14" rx="62" ry="8" fill="#000" fill-opacity=".16"/>
                         <path d="M264.3 -98.5H342.3L323.3 -81.7H245.3Z" fill="#fff"/>
                         <path d="M342.3 -98.5V1.5L323.3 18.3V-81.7Z" fill="#D8DBE0"/>
                         <rect x="245.3" y="-81.7" width="78" height="100" rx="2" fill="#F4F5F7"/>
                         <rect x="282.3" y="-66.7" width="4" height="70" rx="2" fill="#1F66F2"/>
-                      </g>
+                      </g></g>
                     </g>
                   </svg>
                   <div class="result-body" data-result-body>
                     <p class="headline"><svg><use href="#g-review"/></svg><span>An installer will take a look</span></p>
-                    <p class="placement">10 ft right of your meter, 12 ft of cable</p>
+                    <p class="placement">12 ft right of your meter, 14 ft of cable</p>
                     <span class="btn primary"><svg><use href="#g-viewfinder"/></svg>See it on your wall</span>
-                    <p class="notice"><svg><use href="#g-info"/></svg><span>The placement rules aren't final yet, so an installer reviews every result for now.</span></p>
-                    <p class="notice"><svg><use href="#g-half-seen"/></svg><span>A closer spot may exist on the left of your meter. The scan didn't reach that side.</span></p>
+                    <p class="notice"><svg><use href="#g-info"/></svg><span>An installer checks the measurements and suggested placement.</span></p>
+                    <p class="notice"><svg><use href="#g-sides"/></svg><span>A closer spot may exist on the left of your meter. The scan didn't reach that side.</span></p>
+                    <p class="notice"><svg><use href="#g-panel"/></svg><span>Your electrical panel still needs an electrician's review. This scan only covers where the battery can go.</span></p>
                   </div>
                 </div>
 
-                <span class="mode-badge">Illustration</span>
+                <span class="touch" data-touch></span>
                 <!-- Status bar and home indicator share the screen's point grid, so they stay aligned with the frame's island at every size. -->
                 <svg class="system" data-system viewBox="0 0 393 851">
                   <text class="clock" x="66.5" y="35.5" text-anchor="middle">9:41</text>
@@ -408,87 +492,506 @@
             </div>
             <img class="phone-frame" src="assets/iphone-frame.svg" alt="" width="433" height="882" fetchpriority="high">
           </div>
-          <div class="demo-steps" role="group" aria-label="Walkthrough stages">
-            <span class="stage-indicator" data-demo-indicator aria-hidden="true"><span class="stage-progress" data-demo-progress></span></span>
-            <button type="button" data-demo-step="meter" aria-current="step">Meter</button><button type="button" data-demo-step="walk">Walk</button><button type="button" data-demo-step="mark">Mark</button><button type="button" data-demo-step="placement">Placement</button>
-          </div>
-          <div class="demo-controls"><button type="button" data-demo-play><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path class="play-symbol" d="M4 2.6c0-.8.9-1.3 1.6-.9l8 5.2c.6.4.6 1.3 0 1.7l-8 5.2c-.7.4-1.6 0-1.6-.9Z"/><path class="pause-symbol" d="M3.5 2h3.5v12H3.5zm5.5 0h3.5v12H9Z"/></svg><span data-demo-play-label>Play walkthrough</span></button><button type="button" data-demo-reset aria-label="Replay walkthrough"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8a8 8 0 1 1-1 7M4 2v6h6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
-          <figcaption><strong>An illustrated preview, drawn from the iOS prototype's design.</strong><p>No camera opens and nothing is uploaded. Distances on the screen are examples.</p><p class="demo-status" data-demo-status aria-live="polite">Meter. The app asks you to find your electric meter, then takes a close-up photo of it by itself.</p></figcaption>
-          <noscript><p class="demo-fallback">Enable JavaScript to play the illustrated walkthrough.</p></noscript>
+          <figcaption class="visually-hidden" data-demo-status aria-live="polite">Step 1, find the meter. The app asks you to find your electric meter, then takes a close-up photo of it by itself.</figcaption>
         </figure>
-      </section>
-      <section class="purpose wrap" aria-labelledby="purpose-title"><h2 id="purpose-title">A little less<br>back and forth.</h2><p>Separate photos can show the meter, the wall, or the ground. A shared view could help a reviewer understand how they fit together. That's the idea we're testing: a clearer starting point for a home battery survey.</p></section>
-      <section class="process-section" id="how" aria-labelledby="how-title">
-        <div class="wrap">
-          <div class="section-heading"><h2 id="how-title">From your phone<br>to a useful survey.</h2><p>The prototype app guides the scan and measures the wall as you go. The server then checks placement rules against those measurements.</p></div>
-          <ol class="steps">
-            <li><svg class="large-icon" aria-hidden="true"><use href="#icon-phone"/></svg><h3><span>1.</span> Walk the wall.</h3><p>Start at the electric meter and walk slowly along its wall. Haze lifts where the phone has seen the wall and the ground, and it asks for any view it still needs.</p></li>
-            <li><svg class="large-icon" aria-hidden="true"><use href="#icon-ruler"/></svg><h3><span>2.</span> Mark what's near.</h3><p>Pin a window, a door, a gas meter or an AC unit. Then answer what a camera can't tell, like whether the window opens and what covers the ground.</p></li>
-            <li><svg class="large-icon" aria-hidden="true"><use href="#icon-model"/></svg><h3><span>3.</span> Send the measurements.</h3><p>The prototype sends the wall's measurements and your marks. Photos stay on the phone unless you choose to share the scan.</p></li>
-            <li><svg class="large-icon" aria-hidden="true"><use href="#icon-battery"/></svg><h3><span>4.</span> See a possible spot.</h3><p>Plain code checks placement rules along the wall. The phone shows a possible spot, or the view it still needs, and an installer reviews the result.</p></li>
+        <div class="hero-steps">
+          <div class="steps-frame">
+          <span class="step-indicator" data-step-indicator aria-hidden="true"></span>
+          <ol class="steps" aria-label="Walkthrough steps">
+            <li><button class="step" type="button" disabled data-demo-step="meter" aria-current="step"><span class="step-n">1</span><span class="step-name">Find the meter</span><span class="step-short" aria-hidden="true">Meter</span><span class="step-progress" aria-hidden="true"><span data-step-progress></span></span></button></li>
+            <li><button class="step" type="button" disabled data-demo-step="walk"><span class="step-n">2</span><span class="step-name">Walk the wall</span><span class="step-short" aria-hidden="true">Walk</span><span class="step-progress" aria-hidden="true"><span data-step-progress></span></span></button></li>
+            <li><button class="step" type="button" disabled data-demo-step="mark"><span class="step-n">3</span><span class="step-name">Mark what's near</span><span class="step-short" aria-hidden="true">Mark</span><span class="step-progress" aria-hidden="true"><span data-step-progress></span></span></button></li>
+            <li><button class="step" type="button" disabled data-demo-step="placement"><span class="step-n">4</span><span class="step-name">See a possible spot</span><span class="step-short" aria-hidden="true">Spot</span><span class="step-progress" aria-hidden="true"><span data-step-progress></span></span></button></li>
           </ol>
-        </div>
-      </section>
-      <section class="evidence wrap" aria-labelledby="evidence-title">
-        <figure class="capture-art"><div class="capture-stack"><span class="capture-card" aria-hidden="true"></span><span class="capture-card" aria-hidden="true"></span><img src="assets/art/phone-capture.webp" srcset="assets/art/phone-capture-800.webp 800w, assets/art/phone-capture.webp 1536w" sizes="(max-width: 760px) calc(100vw - 48px), (max-width: 1440px) 48vw, 620px" width="1536" height="1024" alt="A hand holding a phone to record an exterior meter wall and the surroundings." loading="lazy" decoding="async"></div><figcaption>Different angles, one place. Generated concept image.</figcaption></figure>
-        <div class="evidence-copy"><h2 id="evidence-title">The wall is only<br>part of the story.</h2><p>A battery occupies real space. The nearby window, uneven ground, and route back to the meter all matter. The survey should help someone understand those relationships, even if they've never visited the home.</p>
-          <div class="evidence-point"><svg class="support-icon" aria-hidden="true"><use href="#icon-photos"/></svg><div><h3>Keep the detail.</h3><p>A 3D view gives context. Original images help with the small things, like a meter label or an obstruction that the reconstruction missed.</p></div></div>
-          <div class="evidence-point"><svg class="support-icon" aria-hidden="true"><use href="#icon-ruler"/></svg><div><h3>Make uncertainty visible.</h3><p>If a measurement doesn't hold up or part of the wall is missing, the reviewer needs to know. A convincing picture isn't enough on its own.</p></div></div>
-        </div>
-      </section>
-      <section class="inside wrap" id="inside" aria-labelledby="inside-title">
-        <div class="section-heading"><h2 id="inside-title">A few routes to<br>the same real space.</h2><p>We're comparing existing reconstruction tools before choosing a pipeline. The test is whether they recover useful geometry from a homeowner's walk around the meter.</p></div>
-        <div class="inside-columns">
-          <article><h3>Geometry and depth.</h3><p>Match overlapping photos, use phone tracking, and add LiDAR where available. This gives us a practical baseline to compare against measured distances.</p><details class="research-detail"><summary>What we need to learn <span class="disclosure-mark" aria-hidden="true"></span></summary><p>How much wall texture and overlap does a scan need? <a href="https://github.com/ooolabdev/ooosplat" rel="noopener">OOOSplat</a> remains a useful reference for the route from images to a viewable scene.</p></details></article>
-          <article><h3>Learned depth.</h3><p>A model can estimate depth from images. Paired with the phone's camera positions, it may help recover a continuous wall when image matching struggles.</p><details class="research-detail"><summary>What we need to learn <span class="disclosure-mark" aria-hidden="true"></span></summary><p>Does the estimated shape agree across viewpoints? Scale, alignment, and thin obstacles need checks against captured evidence.</p></details></article>
-          <article><h3>World models.</h3><p>Models that predict or generate 3D scenes are another research direction. They remain unevaluated for this task; plausible surroundings alone cannot establish a fit.</p><details class="research-detail"><summary>What we need to learn <span class="disclosure-mark" aria-hidden="true"></span></summary><p>Which parts came from the camera, and which were inferred? References such as <a href="https://github.com/IBS27/rumi" rel="noopener">Rumi</a> help us explore the interaction without settling the reconstruction method.</p></details></article>
-        </div>
-        <figure class="model-art coverage-study" data-coverage>
-          <div class="coverage-heading"><h3>Unseen doesn't mean empty.</h3><p>A scan should make its gaps visible.</p></div>
-          <div class="coverage-scene">
-            <svg class="coverage-wall" viewBox="-230 -300 780 340" preserveAspectRatio="xMidYMid slice" role="img" aria-label="The illustrated meter wall from the phone walkthrough: meter, window, downspout and the corner, with gravel along the base.">
-              <rect x="-230" y="-300" width="780" height="340" fill="#E6EBEE"/>
-              <use href="#far-yard"/>
-              <use href="#meter-wall"/>
-              <use href="#yard"/>
-            </svg>
-            <div class="coverage-unknown" data-coverage-unknown aria-hidden="true"><span>Still needs a view</span></div>
-            <span class="coverage-label" aria-hidden="true">In view</span>
-            <span class="coverage-divider" data-coverage-divider aria-hidden="true"><span class="coverage-grip"></span></span>
-            <input id="coverage" type="range" min="0" max="100" value="62" aria-label="Reveal the illustrated wall" aria-describedby="coverage-caption">
           </div>
-          <figcaption id="coverage-caption"><span>Drag to lift the haze, or use the arrow keys.</span><span>The same illustrated wall as the phone. Real coverage would follow the camera's observations.</span></figcaption>
+          <div class="demo-controls">
+            <button class="control" type="button" data-demo-play aria-label="Play walkthrough"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path class="play-symbol" d="M4 2.6c0-.8.9-1.3 1.6-.9l8 5.2c.6.4.6 1.3 0 1.7l-8 5.2c-.7.4-1.6 0-1.6-.9Z"/><path class="pause-symbol" d="M3.5 2h3.5v12H3.5zm5.5 0h3.5v12H9Z"/><path class="replay-symbol" d="M3.2 6.2A5.6 5.6 0 1 1 2.6 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path class="replay-symbol" d="M1.6 2.4v4.8h4.8Z"/></svg><span data-demo-play-label>Play</span></button>
+            <button class="control" type="button" data-demo-all aria-label="Watch all steps" hidden>Watch all</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="walk wrap" id="walk" aria-labelledby="walk-title">
+        <div class="section-head">
+          <h2 id="walk-title">What one walk records.</h2>
+          <button class="control film-replay" type="button" data-film-replay><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.2 6.2A5.6 5.6 0 1 1 2.6 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M1.6 2.4v4.8h4.8Z" fill="currentColor"/></svg>Replay</button>
+        </div>
+        <!-- The landing film's position. See DESIGN.md: a video replaces .film-stage; the three captions become its chapters. -->
+        <figure class="film" data-film data-walked data-split data-read>
+          <div class="film-stage" role="img" aria-label="The illustrated meter wall, first as one continuous view as the phone walks it, then split into three panels: the photographed stretch around the meter, the window marked and measured, and a possible battery spot near the corner.">
+            <div class="film-whole">
+              <svg viewBox="-175 -330 720 360" aria-hidden="true">
+                <use href="#film-world"/>
+                <use class="haze-left" href="#haze-left"/>
+                <use class="haze-right" href="#haze-right"/>
+                <use class="viewfinder" href="#viewfinder"/>
+                <g class="reading" data-reading="seen">
+                  <path class="coverage-strip" d="M-75 16H450"/>
+                  <path class="coverage-strip unseen" d="M-175 16H-80"/>
+                  <rect x="-27" y="-176" width="54" height="68" rx="5" fill="#fff" fill-opacity=".1" stroke="#fff" stroke-width="3"/>
+                  <text class="film-label" x="-160" y="-52">Not seen</text>
+                </g>
+                <g class="reading" data-reading="measured">
+                  <rect x="140" y="-215" width="100" height="110" fill="#45603b" fill-opacity=".16" stroke="#293b30" stroke-width="2.5" stroke-dasharray="7 5"/>
+                  <g class="dimension"><path d="M140 -252H240M140 -258v12M240 -258v12"/><text x="190" y="-262">3&nbsp;ft 3&nbsp;in</text></g>
+                  <g class="dimension side"><path d="M114 -215V-105M108 -215h12M108 -105h12"/><text x="107" y="-157" text-anchor="end">3&nbsp;ft 7&nbsp;in</text></g>
+                  <g class="film-pin"><circle cx="140" cy="-105" r="8" fill="#fff"/><circle cx="140" cy="-105" r="5" fill="#45603b"/></g>
+                  <g class="film-pin"><circle cx="240" cy="-215" r="8" fill="#fff"/><circle cx="240" cy="-215" r="5" fill="#45603b"/></g>
+                </g>
+                <g class="reading" data-reading="placed">
+                  <path class="film-cable" d="M0 -117V-34H322"/>
+                  <rect x="306" y="2" width="104" height="24" rx="2" fill="#45603b" fill-opacity=".3"/>
+                  <!-- Keep the outline inside the third panel's cropped edge, including its mobile gutter. -->
+                  <rect x="318" y="-128" width="94" height="128" rx="3" fill="#45603b" fill-opacity=".08" stroke="#293b30" stroke-width="2" stroke-dasharray="6 5"/>
+                  <g class="film-battery">
+                    <path d="M322 -100l12 -9h76l-12 9Z" fill="#fff"/>
+                    <path d="M398 -100l12 -9v100l-12 9Z" fill="#D8DBE0"/>
+                    <rect x="322" y="-100" width="76" height="100" rx="2" fill="#F4F5F7"/>
+                    <rect x="357" y="-86" width="5" height="70" rx="2.5" fill="#45603b"/>
+                  </g>
+                  <g class="film-tag"><rect x="319" y="-160" width="82" height="20" rx="10" fill="#293b30"/><text x="360" y="-146.5" text-anchor="middle">For review</text></g>
+                </g>
+              </svg>
+            </div>
+            <!-- story.js copies the drawing above into each panel; each panel shows its third of it. -->
+            <div class="panel" data-panel="seen"><span class="panel-chip">Seen</span></div>
+            <div class="panel" data-panel="measured"><span class="panel-chip">Measured</span></div>
+            <div class="panel" data-panel="placed"><span class="panel-chip">Placed</span></div>
+          </div>
+          <figcaption class="readings">
+            <p data-reading-caption="seen"><b>Seen</b>A close-up of the meter, then the wall and ground to the corner.</p>
+            <p data-reading-caption="measured"><b>Measured</b>The window, marked by two corners: 3&nbsp;ft 3&nbsp;in by 3&nbsp;ft 7&nbsp;in.</p>
+            <p data-reading-caption="placed"><b>Placed</b>A possible spot 12&nbsp;ft from the meter, for an installer to check.</p>
+          </figcaption>
         </figure>
       </section>
-      <section class="technical-section" id="technical" aria-labelledby="technical-title">
+
+      <section class="how" id="how" aria-labelledby="how-title">
         <div class="wrap">
-          <div class="section-heading"><h2 id="technical-title">What happens between<br>capture and fit.</h2><p>The phone measures the wall as the homeowner walks. Plain code on the server checks placement rules against those measurements. How best to build a fuller 3D model from the photos is still being compared.</p></div>
-          <article class="technical-row">
-            <figure><img src="assets/art/reconstruction.webp" srcset="assets/art/reconstruction-800.webp 800w, assets/art/reconstruction.webp 1536w" sizes="(max-width: 760px) calc(100vw - 48px), (max-width: 1440px) 52vw, 690px" width="1536" height="1024" alt="Overlapping photos of a brick corner, a sparse cloud of points, and a fuller 3D view of the same wall." loading="lazy" decoding="async"><figcaption>Views of the same place, brought together. Generated illustration of the process.</figcaption></figure>
-            <div class="technical-copy"><span class="technical-number" aria-hidden="true">01</span><h3>Give each image<br>a place in the scene.</h3><p>The planned capture packet pairs photos with camera positions, lens data, motion readings, and the homeowner's marks. LiDAR depth and mesh can join that packet when the phone provides them. In the prototype app, the upload carries only the measurements and marks; the full packet leaves the phone when the homeowner shares it.</p><p>Overlapping views help locate the same wall in space. We're comparing that geometric approach with learned depth, while keeping tools such as <a href="https://github.com/ooolabdev/ooosplat/blob/main/README_EN.md" rel="noopener">OOOSplat</a> as reconstruction references. Its Gaussian splats draw a scene with many small, soft 3D shapes.</p><p class="technical-limit">A viewable scene still needs accurate scale and geometry. It cannot establish what was hidden from the camera.</p></div>
-          </article>
-          <article class="technical-row">
-            <figure><img src="assets/art/scale-study.webp" srcset="assets/art/scale-study-800.webp 800w, assets/art/scale-study.webp 1536w" sizes="(max-width: 760px) calc(100vw - 48px), (max-width: 1440px) 52vw, 690px" width="1536" height="1024" alt="An architectural wall model with physical rulers and a translucent box marking a candidate battery volume." loading="lazy" decoding="async"><figcaption>A reference distance and a possible volume. Generated study, not a clearance assessment.</figcaption></figure>
-            <div class="technical-copy"><span class="technical-number" aria-hidden="true">02</span><h3>Check the space.<br>Show what's missing.</h3><p>A reference measurement can check the scale from phone tracking or depth. Existing house data may help when the same endpoints are visible and its accuracy can be checked.</p><p>Compare a distance that was not used to set the scale, and record the error. Then run explicit placement rules against the battery volume and the observed surroundings.</p><p>Each rule should return pass, fail, or unsure. If a needed area is missing, ask for that view. A proposed location returns relative to the meter so the phone can show it on the wall in AR.</p></div>
-          </article>
-          <div class="live-plan">
-            <div><h3>A steady view.<br>A useful next move.</h3><p>The scan should stay on screen while the model develops. Guidance needs to tell the homeowner where to look next, without waiting on every server update.</p></div>
-            <dl><div><dt>On the phone</dt><dd>Track movement, show what has been captured, and ask for a clearer or missing view.</dd></div><div><dt>On the server</dt><dd>Check placement rules against the measurements, and return a possible spot or the view still missing.</dd></div></dl>
+          <h2 id="how-title">What leaves the phone, and what comes back.</h2>
+          <div class="flow" data-flow data-shown>
+            <ol class="lane lane-now">
+              <li class="loop" aria-hidden="true"><span>Needs a view? The app asks for it.</span></li>
+              <li class="node" data-node="walk">
+                <span class="art"><svg class="node-art" viewBox="-140 -330 640 400" aria-hidden="true">
+                  <use href="#film-world"/>
+                  <use href="#haze-left"/>
+                  <use href="#haze-right" transform="translate(225 0)"/>
+                  <use href="#viewfinder" transform="translate(225 0)"/>
+                </svg></span>
+                <p><b>Walk and mark</b><span>The iPhone tracks the wall and what it has seen.</span></p>
+              </li>
+              <li class="node" data-node="upload">
+                <span class="art"><svg class="node-art" viewBox="-140 -330 640 400" aria-hidden="true">
+                  <use href="#film-world"/>
+                  <rect x="-200" y="-400" width="800" height="520" fill="#e8ede2" fill-opacity=".62"/>
+                  <rect x="140" y="-215" width="100" height="110" fill="#45603b" fill-opacity=".18" stroke="#293b30" stroke-width="7" stroke-dasharray="18 12"/>
+                  <path d="M0 42H450M0 26v32M450 26v32" fill="none" stroke="#293b30" stroke-width="7" stroke-linecap="round"/>
+                  <circle cy="-140" r="17" fill="#45603b" stroke="#fff" stroke-width="7"/>
+                  <circle cx="140" cy="-105" r="15" fill="#45603b" stroke="#fff" stroke-width="7"/>
+                  <circle cx="240" cy="-215" r="15" fill="#45603b" stroke="#fff" stroke-width="7"/>
+                </svg></span>
+                <p><b>Photos, poses and marks</b><span>One capture packet for the whole walk.</span></p>
+              </li>
+              <li class="node" data-node="rules">
+                <span class="art"><svg class="node-art" viewBox="0 0 160 100" aria-hidden="true">
+                  <rect x="4" y="4" width="152" height="92" rx="11" fill="#fbfbf7" filter="url(#lift)"/>
+                  <path d="M20 22h96M20 50h96M20 78h96" class="a-track"/>
+                  <path d="M66 10v80" class="a-limit"/>
+                  <path d="M80 22h28m-28-6v12m28-12v12" class="a-bar pass"/>
+                  <path d="M24 50h26m-26-6v12m26-12v12" class="a-bar fail"/>
+                  <path d="M52 78h32m-32-6v12m32-12v12" class="a-bar unsure"/>
+                  <circle cx="138" cy="22" r="8" class="a-chip pass"/><path d="m134 22 3 3 5-6" class="a-glyph"/>
+                  <circle cx="138" cy="50" r="8" class="a-chip fail"/><path d="m134.5 46.5 7 7m0-7-7 7" class="a-glyph"/>
+                  <circle cx="138" cy="78" r="8" class="a-chip unsure"/><path d="M135 75.5a3 3 0 1 1 3.8 2.9c-.6.2-.8.6-.8 1.3" class="a-glyph dark"/><circle cx="138" cy="83" r="1.1" class="a-dot"/>
+                </svg></span>
+                <p><b>Placement rules</b><span>Written rules, not a model. Each check passes, fails or stays unsure.</span></p>
+              </li>
+              <li class="node" data-node="result">
+                <span class="art"><svg class="node-art" viewBox="-140 -330 640 400" aria-hidden="true">
+                  <use href="#film-world"/>
+                  <use href="#haze-left"/>
+                  <text class="a-q" x="-107" y="-58">?</text>
+                  <rect x="304" y="-128" width="108" height="128" rx="4" fill="#45603b" fill-opacity=".1" stroke="#293b30" stroke-width="6" stroke-dasharray="16 11"/>
+                  <path d="M322 -100l12 -9h76l-12 9Z" fill="#fff"/><path d="M398 -100l12 -9v100l-12 9Z" fill="#D8DBE0"/><rect x="322" y="-100" width="76" height="100" rx="3" fill="#F4F5F7"/><rect x="355" y="-86" width="9" height="70" rx="4.5" fill="#45603b"/>
+                </svg></span>
+                <p><b>A spot, or one more view</b><span>Unsure checks ask for a better view.</span></p>
+              </li>
+              <li class="node" data-node="ar">
+                <span class="art"><svg class="node-art" viewBox="0 0 160 100" aria-hidden="true">
+                  <defs><clipPath id="node-ar-screen"><rect x="58" y="7" width="44" height="86" rx="8"/></clipPath></defs>
+                  <rect x="54" y="3" width="52" height="94" rx="11" fill="url(#phone-body)" filter="url(#lift)"/>
+                  <rect x="54.6" y="3.6" width="50.8" height="92.8" rx="10.4" fill="none" stroke="#fff" stroke-opacity=".18" stroke-width="1"/>
+                  <g clip-path="url(#node-ar-screen)">
+                    <svg x="58" y="7" width="44" height="86" viewBox="266 -250 188 367" preserveAspectRatio="xMidYMid slice">
+                      <use href="#film-world"/>
+                      <path d="M322 -100l12 -9h76l-12 9Z" fill="#fff" fill-opacity=".85"/><path d="M398 -100l12 -9v100l-12 9Z" fill="#D8DBE0" fill-opacity=".85"/><rect x="322" y="-100" width="76" height="100" rx="3" fill="#F4F5F7" fill-opacity=".85" stroke="#1f66f2" stroke-width="5"/>
+                    </svg>
+                  </g>
+                  <rect x="58" y="7" width="44" height="86" rx="8" fill="url(#print-sheen)"/>
+                  <rect x="72" y="10" width="16" height="4" rx="2" fill="#0d1310"/>
+                  <rect x="64" y="80" width="32" height="8" rx="4" fill="#1a58d6"/>
+                </svg></span>
+                <p><b>See it on your wall</b><span>In AR. An installer reviews every result.</span></p>
+              </li>
+            </ol>
           </div>
-          <p class="technical-source">This is the intended system, not a verified end-to-end result. Phone capture, reconstruction, and real-wall accuracy need testing together. <a href="https://house-scanning-briefing.vercel.app/" rel="noopener">Read the scanning brief</a></p>
         </div>
       </section>
-      <section class="questions-section wrap" aria-labelledby="questions-title">
-        <div class="questions-intro"><h2 id="questions-title">An early idea.<br>Some honest answers.</h2><p>This is a design prototype. The phone walkthrough is drawn from the app's design, not recorded from a device. Real capture and reconstruction aren't connected here.</p></div>
-        <div class="questions">
-          <details><summary>Can I scan my home here?<span class="disclosure-mark" aria-hidden="true"></span></summary><p>This page only explains the idea. The iPhone app is a prototype in development, and the server is being built separately. The walkthrough runs on an illustration and never opens your camera.</p></details>
-          <details><summary>Will I need a special phone?<span class="disclosure-mark" aria-hidden="true"></span></summary><p>We're targeting iPhone, with LiDAR as an extra source of depth when available. Working without LiDAR is also a goal. Supported devices and capture conditions still need physical testing.</p></details>
-          <details><summary>How will you know it helps?<span class="disclosure-mark" aria-hidden="true"></span></summary><p>We'll record capture effort, processing time, measurement errors, and what the reviewer still needs. We'll compare the model and images with images alone to see whether reconstruction earns its place.</p></details>
-          <details><summary>Does a possible fit mean approval?<span class="disclosure-mark" aria-hidden="true"></span></summary><p>No. A visual fit is only part of the decision. A qualified review still needs to confirm the battery model, electrical requirements, placement rules, and measurements.</p></details>
+
+      <section class="stack wrap" id="stack" aria-labelledby="stack-title">
+        <h2 id="stack-title">From camera frames to a wall in feet.</h2>
+        <figure class="stack-figure" data-stack data-exploded aria-label="Three drawings of the phone's side: four layers ARKit gives the app, the meter wall as a plan in feet, and the scene.json file the phone writes.">
+          <div class="stack-panel stack-layers" data-layers>
+            <p class="stack-cap"><b>Four layers from ARKit</b>Every iPhone tracks the camera. LiDAR iPhones add depth and a mesh.</p>
+            <div class="stack-visual">
+              <svg class="layers" viewBox="0 0 400 390" aria-hidden="true">
+                <defs>
+                  <clipPath id="layer-plane"><rect width="240" height="150" rx="6"/></clipPath>
+                  <linearGradient id="sheet-light" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".34"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#1f2d24" stop-opacity=".12"/></linearGradient>
+                  <radialGradient id="sheet-shadow"><stop offset="0" stop-color="#1f2d24" stop-opacity=".3"/><stop offset=".62" stop-color="#1f2d24" stop-opacity=".13"/><stop offset="1" stop-color="#1f2d24" stop-opacity="0"/></radialGradient>
+                </defs>
+                <!-- Each layer is a 240 × 150 sheet laid flat: matrix(.82 .41 -.82 .41) maps its width and depth onto the page.
+                     Painted bottom to top, so a lower sheet is only ever covered by the ones above it; story.js empties those
+                     to outlines when a lower sheet is selected. -->
+                <g class="layer" data-layer="planes" style="--collapse: 0px">
+                  <rect class="sheet-shadow" transform="translate(4 16) matrix(.82 .41 -.82 .41 150 208)" x="-18" y="-14" width="276" height="178" rx="34" fill="url(#sheet-shadow)"/>
+                  <g class="sheet">
+                    <g class="sheet-body">
+                      <rect transform="translate(0 4) matrix(.82 .41 -.82 .41 150 208)" width="240" height="150" rx="6" fill="#c2cabb"/>
+                      <g transform="matrix(.82 .41 -.82 .41 150 208)">
+                        <rect width="240" height="150" rx="6" fill="#eef1ea"/>
+                        <rect x="10" y="10" width="220" height="92" rx="3" fill="#45603b" fill-opacity=".07"/>
+                        <path d="M10 33H230M10 56H230M10 79H230M54 10V102M98 10V102M142 10V102M186 10V102" stroke="#45603b" stroke-opacity=".16" stroke-width="1"/>
+                        <rect x="10" y="10" width="220" height="92" rx="3" fill="none" stroke="#45603b" stroke-width="2.2" stroke-dasharray="8 6"/>
+                        <rect x="10" y="110" width="220" height="30" rx="3" fill="#45603b" fill-opacity=".2" stroke="#45603b" stroke-width="2.2"/>
+                        <path d="M54 110V140M98 110V140M142 110V140M186 110V140" stroke="#45603b" stroke-opacity=".22" stroke-width="1"/>
+                        <g fill="#45603b"><circle cx="120" cy="56" r="4.5"/><circle cx="120" cy="125" r="4.5"/></g>
+                        <g fill="none" stroke="#45603b" stroke-width="1.6"><circle cx="120" cy="56" r="10"/><circle cx="120" cy="125" r="10"/></g>
+                        <rect width="240" height="150" rx="6" fill="url(#sheet-light)"/>
+                      </g>
+                    </g>
+                    <rect class="sheet-outline" transform="matrix(.82 .41 -.82 .41 150 208)" width="240" height="150" rx="6"/>
+                    <g class="layer-note"><path d="M40 330V282M32 292l8-12 8 12" fill="none" stroke="#293b30" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><text class="layer-axis" x="40" y="346" text-anchor="middle">+y</text></g>
+                    <g class="layer-n"><circle cx="360" cy="306" r="12"/><text x="360" y="310.5">4</text></g>
+                  </g>
+                </g>
+                <g class="layer" data-layer="mesh" style="--collapse: 62px">
+                  <rect class="sheet-shadow" transform="translate(4 16) matrix(.82 .41 -.82 .41 150 146)" x="-18" y="-14" width="276" height="178" rx="34" fill="url(#sheet-shadow)"/>
+                  <g class="sheet">
+                    <g class="sheet-body">
+                      <rect transform="translate(0 4) matrix(.82 .41 -.82 .41 150 146)" width="240" height="150" rx="6" fill="#c2cabb"/>
+                      <g transform="matrix(.82 .41 -.82 .41 150 146)">
+                        <g clip-path="url(#layer-plane)"><use href="#layer-mesh-art"/></g>
+                        <rect width="240" height="150" rx="6" fill="url(#sheet-light)"/>
+                      </g>
+                    </g>
+                    <rect class="sheet-outline" transform="matrix(.82 .41 -.82 .41 150 146)" width="240" height="150" rx="6"/>
+                    <g class="layer-n"><circle cx="360" cy="244" r="12"/><text x="360" y="248.5">3</text></g>
+                  </g>
+                </g>
+                <g class="layer" data-layer="depth" style="--collapse: 124px">
+                  <rect class="sheet-shadow" transform="translate(4 16) matrix(.82 .41 -.82 .41 150 84)" x="-18" y="-14" width="276" height="178" rx="34" fill="url(#sheet-shadow)"/>
+                  <g class="sheet">
+                    <g class="sheet-body">
+                      <rect transform="translate(0 4) matrix(.82 .41 -.82 .41 150 84)" width="240" height="150" rx="6" fill="#c2cabb"/>
+                      <g transform="matrix(.82 .41 -.82 .41 150 84)">
+                        <g clip-path="url(#layer-plane)"><use href="#layer-depth-art"/></g>
+                        <rect width="240" height="150" rx="6" fill="url(#sheet-light)"/>
+                      </g>
+                    </g>
+                    <rect class="sheet-outline" transform="matrix(.82 .41 -.82 .41 150 84)" width="240" height="150" rx="6"/>
+                    <g class="layer-n"><circle cx="360" cy="182" r="12"/><text x="360" y="186.5">2</text></g>
+                  </g>
+                </g>
+                <g class="layer" data-layer="camera" style="--collapse: 186px">
+                  <rect class="sheet-shadow" transform="translate(4 16) matrix(.82 .41 -.82 .41 150 22)" x="-18" y="-14" width="276" height="178" rx="34" fill="url(#sheet-shadow)"/>
+                  <g class="sheet">
+                    <g class="sheet-body">
+                      <rect transform="translate(0 4) matrix(.82 .41 -.82 .41 150 22)" width="240" height="150" rx="6" fill="#c2cabb"/>
+                      <g transform="matrix(.82 .41 -.82 .41 150 22)">
+                        <g clip-path="url(#layer-plane)">
+                          <svg width="240" height="150" viewBox="-150 -300 480 300" preserveAspectRatio="xMidYMid slice"><use href="#film-world"/></svg>
+                          <path d="M12 30V16a4 4 0 0 1 4-4h14M210 12h14a4 4 0 0 1 4 4v14M228 120v14a4 4 0 0 1-4 4h-14M30 138H16a4 4 0 0 1-4-4v-14" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".9"/>
+                        </g>
+                        <rect width="240" height="150" rx="6" fill="url(#sheet-light)"/>
+                      </g>
+                    </g>
+                    <rect class="sheet-outline" transform="matrix(.82 .41 -.82 .41 150 22)" width="240" height="150" rx="6"/>
+                    <g class="layer-n"><circle cx="360" cy="120" r="12"/><text x="360" y="124.5">1</text></g>
+                  </g>
+                </g>
+              </svg>
+              <ol class="layer-key" aria-label="ARKit layers">
+                <li><button class="layer-btn" type="button" data-layer-key="camera" aria-pressed="false" aria-describedby="layer-camera-detail"><span class="layer-num" aria-hidden="true">1</span><span class="layer-name">Camera and pose</span><span class="layer-sub">Every iPhone</span></button></li>
+                <li><button class="layer-btn" type="button" data-layer-key="depth" aria-pressed="false" aria-describedby="layer-depth-detail"><span class="layer-num" aria-hidden="true">2</span><span class="layer-name">LiDAR depth</span><span class="layer-sub"><code>sceneDepth</code>, LiDAR iPhones</span></button></li>
+                <li><button class="layer-btn" type="button" data-layer-key="mesh" aria-pressed="false" aria-describedby="layer-mesh-detail"><span class="layer-num" aria-hidden="true">3</span><span class="layer-name">Classified mesh</span><span class="layer-sub">Wall, floor, door, window</span></button></li>
+                <li><button class="layer-btn" type="button" data-layer-key="planes" aria-pressed="false" aria-describedby="layer-planes-detail"><span class="layer-num" aria-hidden="true">4</span><span class="layer-name">Planes and gravity</span><span class="layer-sub"><code>.gravity</code>, +y up</span></button></li>
+              </ol>
+              <div class="layer-details">
+                <p data-layer-detail="all">Select a layer to see what it adds.</p>
+                <p id="layer-camera-detail" data-layer-detail="camera" hidden>Each frame comes with the camera's pose, a 4&nbsp;×&nbsp;4 transform in ARKit's world space. Keyframes keep the image, the pose and the lens intrinsics.</p>
+                <p id="layer-depth-detail" data-layer-detail="depth" hidden>On an iPhone with LiDAR, <code>sceneDepth</code> adds a distance for every pixel. Without it, the app works from images and poses alone.</p>
+                <p id="layer-mesh-detail" data-layer-detail="mesh" hidden>LiDAR iPhones also rebuild the surroundings as a triangle mesh, and ARKit labels each face: wall, floor, door or window.</p>
+                <p id="layer-planes-detail" data-layer-detail="planes" hidden>ARKit detects the wall and the ground as planes. <code>.gravity</code> alignment points +y straight up, so the wall stands vertical in every frame.</p>
+              </div>
+            </div>
+          </div>
+          <div class="stack-panel stack-plan">
+            <p class="stack-cap"><b>The wall, measured in feet</b>HouseScanKit puts every mark at <i>s</i>, feet along the wall from the meter.</p>
+            <div class="stack-visual">
+              <svg class="plan" viewBox="0 0 400 310" aria-hidden="true">
+                <!-- 1 ft = 16 units. The meter sits at x 110 (s = 0); the wall runs along y 96 and turns at s 14.8. -->
+                <rect x="14" y="98" width="56" height="64" fill="url(#coverage-hatch)"/>
+                <rect x="70" y="98" width="316" height="64" fill="#45603b" fill-opacity=".14"/>
+                <path d="M14 96H347V26" fill="none" stroke="#293b30" stroke-width="6" stroke-linejoin="round"/>
+                <path d="M183.6 96h52.8" stroke="#9fb2c4" stroke-width="6"/>
+                <rect x="104" y="86" width="12" height="10" rx="2" fill="#8e949c"/>
+                <rect x="279.6" y="99" width="40" height="29" rx="2" fill="#45603b" fill-opacity=".45" stroke="#293b30" stroke-width="2"/>
+                <g class="plan-ticks"><path d="M30 72v8M110 68v12M190 72v8M270 72v8"/></g>
+                <g class="plan-scale"><text x="30" y="62">−5</text><text x="110" y="58">s = 0</text><text x="190" y="62">5</text><text x="270" y="62">10 ft</text></g>
+                <text class="plan-note" x="339" y="36" text-anchor="end">corner</text>
+                <text class="plan-note" x="210" y="116" text-anchor="middle">window</text>
+                <text class="plan-note" x="299.6" y="146" text-anchor="middle">spot</text>
+                <text class="plan-note" x="78" y="154">observed ground</text>
+                <g class="plan-cams">
+                  <path d="M110 220 92 168h36Z"/><path d="M150 220 132 168h36Z"/><path d="M190 220 172 168h36Z"/><path d="M230 220 212 168h36Z"/><path d="M270 220 252 168h36Z"/><path d="M310 220 292 168h36Z"/><path d="M350 220 332 168h36Z"/>
+                </g>
+                <path d="M110 228H350" fill="none" stroke="#293b30" stroke-width="3" stroke-linecap="round" stroke-dasharray="0 9"/>
+                <text class="plan-note" x="110" y="250">keyframe poses</text>
+                <g class="plan-axes" transform="rotate(-18 36 276)">
+                  <path d="M36 276h40M70 270l8 6-8 6M36 276v22M30 292l6 8 6-8" fill="none" stroke="#566257" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <text x="84" y="280">x</text><text x="46" y="302">z</text>
+                </g>
+                <text class="plan-note" x="110" y="290">x, z in feet</text>
+              </svg>
+            </div>
+          </div>
+          <div class="stack-panel stack-wire">
+            <p class="stack-cap"><b>What the phone writes</b>The wall, your marks, what the walk saw and each keyframe's pose, in one small file.</p>
+            <div class="stack-visual">
+              <div class="code">
+                <p class="code-head"><span class="code-file">scene.json</span><span class="code-note">Abridged, example values</span></p>
+                <pre class="json" tabindex="0" aria-label="scene.json, abridged, with example values"><code>{
+  <span class="k">"meter"</span>: {
+    <span class="k">"pos"</span>: [<span class="n">0.0</span>, <span class="n">4.6</span>, <span class="n">0.0</span>],
+    <span class="k">"wall_id"</span>: <span class="s">"front"</span>
+  },
+  <span class="k">"walls"</span>: [{
+    <span class="k">"id"</span>: <span class="s">"front"</span>,
+    <span class="k">"baseline"</span>: [[<span class="n">-2.5</span>, <span class="n">0</span>], [<span class="n">14.8</span>, <span class="n">0</span>]]
+  }],
+  <span class="k">"objects"</span>: [{
+    <span class="k">"type"</span>: <span class="s">"window"</span>,
+    <span class="k">"wall_id"</span>: <span class="s">"front"</span>,
+    <span class="k">"span_ft"</span>: [<span class="n">4.6</span>, <span class="n">7.9</span>],
+    <span class="k">"attrs"</span>: { <span class="k">"operable"</span>: <span class="b">false</span> },
+    <span class="k">"source"</span>: <span class="s">"tap"</span>
+  }],
+  <span class="k">"coverage"</span>: { <span class="k">"observed"</span>: [{
+    <span class="k">"band"</span>: <span class="s">"ground"</span>,
+    <span class="k">"span_ft"</span>: [<span class="n">-2.5</span>, <span class="n">14.8</span>],
+    <span class="k">"out_ft"</span>: <span class="n">6.0</span>
+  }] },
+  <span class="k">"keyframes"</span>: [{
+    <span class="k">"img"</span>: <span class="s">"k9.jpg"</span>,
+    <span class="k">"pose"</span>: [<span class="n">1</span>, <span class="n">0</span>, <span class="n">0</span>, <span class="n">0</span>,
+             <span class="n">0</span>, <span class="n">1</span>, <span class="n">0</span>, <span class="n">0</span>,
+             <span class="n">0</span>, <span class="n">0</span>, <span class="n">1</span>, <span class="n">0</span>,
+             <span class="n">9.0</span>, <span class="n">4.8</span>, <span class="n">6.0</span>, <span class="n">1</span>]
+  }]
+}</code></pre>
+              </div>
+            </div>
+          </div>
+        </figure>
+      </section>
+
+      <section class="rebuild wrap" id="server" aria-labelledby="server-title">
+        <div class="rebuild-intro">
+          <h2 id="server-title">The server rebuilds the wall from the photos.</h2>
+          <p>The capture packet carries each photo with its ARKit pose, LiDAR depth when the phone has it, and your taps. The server measures the wall in 3D, checks the rules and answers with a spot or the view it still needs.</p>
+        </div>
+        <div class="rebuild-grid">
+          <figure class="server-figure" data-server data-shown aria-label="The server path in four stages. Progress events return to the phone while it runs.">
+            <ol class="server-flow">
+              <li class="server-node">
+                <span class="art"><svg class="server-art" viewBox="0 0 320 200" aria-hidden="true">
+                  <rect width="320" height="200" fill="url(#art-stage)"/>
+                  <ellipse cx="176" cy="178" rx="122" ry="9" fill="#1f2d24" fill-opacity=".2" filter="url(#soft-blur)"/>
+                  <g transform="translate(262 146) rotate(7)" filter="url(#lift)"><rect x="-36" y="-25" width="72" height="50" rx="3" fill="#fbfbf7"/><svg x="-32" y="-21" width="64" height="40" viewBox="0 0 240 150" preserveAspectRatio="xMidYMid slice"><use href="#layer-depth-art"/></svg></g>
+                  <g transform="translate(186 70) rotate(-9)" filter="url(#lift)"><rect x="-66" y="-45" width="132" height="90" rx="3" fill="#fbfbf7"/><svg x="-61" y="-40" width="122" height="74" viewBox="-160 -300 626 380" preserveAspectRatio="xMidYMid slice"><use href="#film-world"/></svg></g>
+                  <g transform="translate(214 90) rotate(4)" filter="url(#lift)"><rect x="-66" y="-45" width="132" height="90" rx="3" fill="#fbfbf7"/><svg x="-61" y="-40" width="122" height="74" viewBox="96 -252 196 119" preserveAspectRatio="xMidYMid slice"><use href="#film-world"/></svg></g>
+                  <g transform="translate(190 112) rotate(-2)" filter="url(#lift)"><rect x="-66" y="-45" width="132" height="90" rx="3" fill="#fbfbf7"/><svg x="-61" y="-40" width="122" height="74" viewBox="-62 -190 124 75" preserveAspectRatio="xMidYMid slice"><use href="#film-world"/></svg><rect x="-61" y="-40" width="122" height="74" fill="url(#print-sheen)"/>
+                    <g transform="translate(-48 -27)" stroke-width="2.2" stroke-linecap="round"><path d="M0 0h13" stroke="#b25a45"/><path d="M0 0v-13" stroke="#45603b"/><path d="M0 0 -8 8" stroke="#3f6b8a"/><circle r="2.4" fill="#fbfbf7" stroke="#293b30" stroke-width="1.4"/></g></g>
+                  <g transform="translate(66 104) rotate(-5)" filter="url(#lift)"><rect x="-40" y="-56" width="80" height="112" rx="8" fill="url(#dark-card)"/>
+                    <circle cx="-29" cy="-45" r="2.2" fill="#8ea394"/><circle cx="-22" cy="-45" r="2.2" fill="#8ea394" fill-opacity=".6"/>
+                    <g stroke-width="3.4" stroke-linecap="round" fill="none"><path d="M-28 -30h18M-24 -20h22M-24 -10h14M-28 0h20M-24 10h24M-24 20h16M-28 30h14M-24 40h20" stroke="#c9deb5"/><path d="M-4 -20h18M-6 -10h10M0 10h12M-4 20h8" stroke="#efd79c"/><path d="M-4 30h24M-8 -30h8M0 40h14" stroke="#a9cde2"/></g></g>
+                </svg></span>
+                <p><b>Capture packet</b><span>Photos, poses and depth upload in stages; finalizing starts the run.</span><code>POST /v1/captures</code></p>
+              </li>
+              <li class="server-node">
+                <span class="art"><svg class="server-art" viewBox="0 0 320 200" aria-hidden="true">
+                  <rect width="320" height="200" fill="url(#art-stage)"/>
+                  <g class="sr-cloud">
+                  <path d="M175.3 116h0M179 113.1h0M181.8 113h0M184.6 111.7h0M188.3 111.2h0M191.4 109.7h0M195.5 108.4h0M198.4 106.2h0M201.5 105.9h0M204.1 104.2h0M206.3 104.3h0M179 108.9h0M181.9 108.4h0M184.7 107.7h0M189.1 105.1h0M193 103.9h0M194.9 104.2h0M198 103.3h0M201.8 100.9h0M204.2 100h0M207.5 98.9h0M178.9 104.9h0M182.6 103.8h0M185.8 102h0M189.5 100.6h0M192.6 99.8h0M194.9 100.3h0M197.7 99h0M202 97h0M204.2 96.3h0M207.2 95.2h0M179 100.2h0M182.2 98.5h0M186.3 98.2h0M189.7 97.3h0M192.7 95.3h0M196.2 94.7h0M198.4 94.5h0M201.4 94.2h0M204.1 93h0M208.1 90.8h0M182 95.6h0M186.4 94.2h0M190 92.6h0M192.8 91.5h0M195.8 90.5h0M198.6 90.5h0M201.5 89h0M204.5 88.8h0M208 87h0M182.6 90.5h0M186.7 89.7h0M189.4 88.7h0M193.5 87.6h0M195.7 86.4h0M198.5 86.3h0M202.6 84.6h0M205.7 83h0M207.4 83.7h0M186 85.6h0M189.8 83.8h0M193.1 82h0M195.5 82.5h0M199.8 81.7h0M202.6 80.3h0M206.2 79.9h0M208.1 79.5h0M186.1 80.2h0M190.6 79.6h0M193.7 77.7h0M196.5 77.8h0M199.2 76.3h0M202.2 75.7h0M205.1 76.3h0M208.7 73.9h0M189.7 73.7h0M193.4 74h0M197.1 72h0M199.3 72h0M202.3 71h0M206.5 71.1h0M208.5 70.9h0M191 70.4h0M194.5 68.5h0M196.5 67.6h0M200.5 66.8h0M203.3 66.2h0M205.8 66.1h0M209.8 66.2h0M190.9 64.4h0M194.3 65.1h0M196.6 64.2h0M200.6 64h0M203.8 63.1h0M206.7 62h0M209.6 62h0M194.3 59.2h0M196.8 59.9h0M200 58.9h0M202.8 58.5h0M206.8 57.7h0M210.5 56.9h0M194.7 55.5h0M197.2 54.6h0M201.1 53.3h0M203.3 53.1h0M206.3 53.1h0M210 52h0M197.3 48.6h0M201.4 48.4h0M204.1 49h0M206.7 47.7h0M210.6 48.3h0M197.7 44.6h0M201.5 44.7h0M204.5 43.8h0M207.2 43h0M210.5 43.7h0M202.3 39.8h0M204.6 40h0M207.7 38.2h0M210.4 38.1h0M201.5 35.2h0M205.3 34.9h0M207.5 34h0M210.8 32.9h0M204.9 29.8h0M208 29.8h0M210.9 28.2h0" stroke="#35503f" stroke-width="2.0" stroke-linecap="round"/>
+                  <path d="M182.2 116.2h0M185.3 114.9h0M190.6 113.4h0M194.2 112.5h0M197.6 110.5h0M200.9 108.7h0M204.7 107.4h0M208.4 105.8h0M186.7 117.7h0M192.3 116.8h0M196.9 115h0M199.5 113.5h0M202.8 112.1h0M206.7 110.4h0M209.7 109.2h0M213.5 107.8h0M199.2 116.7h0M203.4 115h0M207.2 113.5h0M210.8 112.1h0M216 110.3h0M219 109.9h0M208.5 116.4h0M213.7 115h0M216.3 113.5h0M220.1 112.8h0M222.1 110.3h0M218.5 116.6h0M222.5 114.8h0M225.6 114.1h0M229.6 112.4h0M227.3 117.2h0M230.6 115.7h0M233.6 112.8h0M236.5 117.3h0M239 115.2h0M243.7 116.7h0" stroke="#768f69" stroke-width="2.0" stroke-linecap="round"/>
+                  <path d="M133 130.5h0M138.1 128.1h0M142.7 127.1h0M147.6 125.8h0M150.7 124.4h0M154.6 122.5h0M159.9 120.2h0M164.4 119.5h0M167.6 117.7h0M171.8 115.6h0M137.2 123.7h0M141.3 122.7h0M147.1 120.9h0M151.8 118.6h0M155.6 118.4h0M160.5 115.2h0M163 115h0M168.1 113.2h0M171.2 112.7h0M176 109.9h0M137.5 117.7h0M142.9 116.8h0M146.7 116.5h0M150.7 115.4h0M154.9 113h0M159.7 111.6h0M163.5 109.3h0M167.6 109.1h0M171.9 107.3h0M175.5 105.3h0M136.3 112.9h0M142.8 112.7h0M145.7 110.1h0M151 109.2h0M155 108.7h0M158.9 107.3h0M162.8 106h0M167.2 103.5h0M171.4 103.3h0M174.2 102.2h0M142.5 107.4h0M146.6 104.8h0M151.8 103.8h0M155.5 102.3h0M158.6 102.5h0M163 99.9h0M168 98.9h0M171.7 99h0M175.7 96.8h0M179.3 96.6h0M141.2 101.9h0M147.2 99.8h0M150.5 99.4h0M154.4 97.2h0M160.2 96.8h0M163.6 96h0M168.6 93.4h0M172.1 92.5h0M175.2 91.7h0M179.6 91.2h0M145.9 94.8h0M151.6 94.3h0M155.3 92.9h0M159.2 91.4h0M163 91.5h0M167.7 89.6h0M171.7 89.3h0M175.5 86.6h0M179.6 86.3h0M182.5 84.8h0M146.9 90.4h0M149.8 87.4h0M171.5 84.6h0M176.5 82.2h0M178.5 82.4h0M183.6 79.8h0M146.1 84.8h0M175.9 77.4h0M178.8 77.2h0M183 76.7h0M186.7 75.3h0M150.4 77.6h0M175.1 72.9h0M178.5 71.8h0M183.5 70.6h0M186 70.6h0M149.9 73.1h0M175.4 67.5h0M179.9 67h0M182.6 66.1h0M186.6 65.4h0M157.8 66.2h0M162 65.1h0M175.9 62h0M180.6 62.7h0M183.9 60.3h0M186.3 61.5h0M191.2 59.5h0M176.4 57.8h0M179.7 56.5h0M182.9 57h0M186.7 55.7h0M190.7 55.9h0M175.9 51.7h0M179.7 52.3h0M184.2 51h0M187.6 50.9h0M190.6 49.8h0M194.6 49.9h0M159.4 48.6h0M164.7 49.2h0M168.1 47.6h0M172.7 47.5h0M177 47.7h0M180.3 47.4h0M184.1 45.1h0M188.3 45.6h0M191.8 46.2h0M194.9 45.2h0M164.6 41.3h0M168 43h0M171.4 42.6h0M175.2 41.1h0M181.2 42h0M183.5 41.9h0M187.1 40h0M190.7 39.7h0M195 39.4h0M198.3 39.2h0M163.4 36.6h0M167.9 37.2h0M172.7 35.6h0M175.9 35.4h0M180.1 35.6h0M184.7 35.4h0M187.8 35.9h0M190.9 34.7h0M195.1 35h0M198.1 35.6h0M163 31.6h0M168.6 31.9h0M172.1 31.7h0M176.2 29.5h0M181 31.1h0M183.9 29.2h0M188.1 30.1h0M192.2 29.9h0M194.3 30.3h0M198.7 29.4h0M202.4 29.9h0" stroke="#4f6f58" stroke-width="2.3" stroke-linecap="round"/>
+                  <path d="M138.2 132.8h0M143.7 131.4h0M149.3 128.4h0M153 126.7h0M157.6 125.6h0M163.2 123.3h0M168.6 122.1h0M174 119.7h0M177.1 118.1h0M147.2 133.1h0M152.8 131.2h0M159.1 129.5h0M163.1 126.9h0M168.5 125.8h0M174.8 124h0M178.6 121.7h0M183.5 119.5h0M159.7 133.3h0M163 131.8h0M168.3 129.4h0M174.8 126.6h0M178.4 126.2h0M181.5 123.8h0M188 121.5h0M191.4 119.5h0M197.2 118.3h0M167.3 133.2h0M174.7 131.6h0M178.8 130.1h0M182.7 126.8h0M188.7 124.7h0M193.3 124h0M196.8 121.7h0M201.2 120.3h0M203.7 117.9h0M179.8 133.6h0M183.5 130.9h0M189.4 128.7h0M193 127.7h0M196.1 125.7h0M204.2 123.9h0M207.6 122h0M211.3 120.2h0M215.2 119.2h0M193.2 131.6h0M199 129.9h0M204.2 128.3h0M208.1 125.8h0M212.1 124h0M215.5 122.1h0M220.6 119.8h0M222.1 118.5h0M199.9 133.7h0M204.1 132.3h0M211.7 129.2h0M215.1 126.9h0M219 125.9h0M222.2 123.9h0M226.8 121.7h0M230 120.8h0M232.4 119.2h0M212.8 134.2h0M215.8 132h0M220 129.6h0M225 127.4h0M225.6 125.7h0M230.4 123.2h0M235.1 121.3h0M239 120.9h0M240.7 118.3h0M227 131.7h0M230.7 130.5h0M235.2 127.3h0M238 126.1h0M240.7 123.7h0M243.3 121.7h0M249.2 121h0M250.3 118.5h0M234.1 132.1h0M240.5 129.9h0M244 127.9h0M246.9 126.1h0M252 124h0M253.2 121.7h0M257.6 121.2h0M246.3 132h0M249.2 130h0M254 128.2h0M256.2 125.5h0M261.9 124.6h0M265.1 122.3h0M253.1 134h0M255.4 132.3h0M261 130.2h0M264.5 128.8h0M267.7 126h0M272 124h0" stroke="#8ea77e" stroke-width="2.3" stroke-linecap="round"/>
+                  <path d="M74.5 152.6h0M81.1 148.4h0M87.6 147h0M94.9 144.9h0M99.2 141.9h0M105.5 141.3h0M112.9 138.6h0M117.9 136.3h0M121.7 135.4h0M128.2 132.3h0M74.7 145.6h0M81.7 144.4h0M88.3 140.1h0M93.4 139.1h0M100.2 137.5h0M105.2 135.7h0M110.5 134.1h0M116 131.3h0M123.2 128.3h0M127.1 127.6h0M132.1 125.1h0M74.4 138.7h0M79.4 138.8h0M88 135.9h0M94.5 132.3h0M99.5 131.8h0M106.7 128.4h0M112.5 127.2h0M117.5 125.7h0M121.8 124.4h0M126.7 122.2h0M133.3 120.3h0M80.3 132.5h0M86.1 130.5h0M92.9 127.1h0M100.5 124.5h0M103.9 124.2h0M111.4 121.9h0M116.4 119.2h0M121.7 119.3h0M127.1 116h0M131.3 114.9h0M78 125.7h0M85.3 123.5h0M91.1 121.5h0M97.9 120.7h0M103.4 119.2h0M109.8 116h0M116.8 113.9h0M122.4 112.7h0M128.2 111.7h0M132.6 110.6h0M137.9 107.8h0M86.4 117.6h0M90.8 115.7h0M96.9 113.1h0M104.9 111.1h0M110.8 109.9h0M114.6 109h0M120.8 108.1h0M125.9 104.9h0M132.1 103.3h0M137.9 102.3h0M83.3 111.3h0M92 109.6h0M96.8 108h0M105 104.9h0M108.7 105.9h0M116.4 102.8h0M120.1 102.1h0M127.4 99.2h0M130.9 99.7h0M136.9 97.1h0M142.1 95.8h0M91.2 101.7h0M96.8 102.4h0M104 101h0M108.9 98.8h0M114.2 98.4h0M120.1 94.7h0M127.1 94.8h0M132 92.3h0M135.4 92.2h0M142.2 91.2h0M89.2 96.1h0M95.6 95.9h0M103.6 93.4h0M108.5 91.3h0M114.1 90.6h0M121.6 90.6h0M126.8 87.8h0M129.9 88.2h0M135.6 85.5h0M142.3 85.4h0M90.3 89.9h0M97.2 89h0M102.3 86.6h0M109.1 86.9h0M114.9 84.1h0M119.4 84.4h0M125.2 83.8h0M131.1 80.7h0M135.9 80h0M141.8 80.4h0M145.9 78.4h0M95.2 81.3h0M102.9 80.7h0M109 80.6h0M114.3 79.4h0M119.8 78.8h0M124.1 76.3h0M131 74.8h0M136 75.3h0M140 75.1h0M145.9 73.2h0M95 76.1h0M101.4 75.4h0M109 74.4h0M112.2 73.6h0M120 70.7h0M124.4 70h0M129.9 69.2h0M136.4 68.8h0M140.8 67.6h0M146.5 67.6h0M150.4 67.1h0M101.9 68.8h0M106.6 68.2h0M113.3 67.5h0M118.1 65.1h0M125.3 64.4h0M130.2 64.3h0M134.2 62.4h0M140.2 63.2h0M145.8 62.1h0M149.8 61.3h0M100 60.9h0M106.9 61.4h0M112.5 59.7h0M118.9 58.1h0M124.7 57.8h0M129.6 56.7h0M135.6 58.1h0M141.1 56.4h0M145.7 55.9h0M150.4 55.1h0M104.9 55.2h0M112.9 53.8h0M119.1 52h0M125.2 51.9h0M130.2 50.7h0M136 51.8h0M140.3 50h0M145.9 49.8h0M149.6 50.4h0M153.8 49.2h0M106.3 48.1h0M111.5 46.1h0M117.4 47.6h0M124.7 45.3h0M130.2 44.6h0M134.3 45.5h0M139.8 44.7h0M146.1 45.1h0M149.3 44.7h0M154.9 42.3h0M158.5 43.2h0M112.6 40.4h0M118 38.6h0M122.9 40.7h0M129.2 38.8h0M135.8 39.7h0M140.6 37.3h0M144.7 37.1h0M150.2 36.6h0M154.1 37.3h0M159 36.5h0M110.6 33.3h0M118.2 31.5h0M122 33.4h0M130 31.4h0M133.5 31.5h0M139.8 30.7h0M144.4 31.2h0M150.3 32.1h0M155.1 32.3h0M158.8 32.1h0M112.3 95.2h0M108.7 93.2h0M104.5 93.2h0M104.7 80h0M111.4 94.5h0M111.4 95.4h0M103.5 80.2h0M109.9 90.6h0M103.5 90.4h0M103.3 87.8h0M102.9 84.4h0M103.7 96.6h0M107.7 88.3h0M103.4 87.2h0M109.7 86.3h0M101.5 85.2h0M109.6 95.9h0M104.5 82.8h0M107.4 97.1h0M105.8 81.8h0M102.7 83.2h0M103.2 91.6h0M101.2 89.2h0M107.4 95.2h0M109.4 81.3h0M109.1 90.2h0M106.5 88.3h0M107.8 96.9h0M103.9 94.7h0M103.3 83.3h0M101.8 85.8h0M101.3 87.8h0M106.4 84.8h0M110 83.8h0M102.6 89.5h0M104.7 95.7h0M102.7 87.7h0M102.8 88h0M102.7 83.4h0M105.7 90.2h0M107.2 90.4h0M109.6 90.7h0M105.2 90.1h0M109.5 80.5h0" stroke="#6f8f72" stroke-width="2.7" stroke-linecap="round"/>
+                  <path d="M81.9 154.6h0M89.2 151.2h0M100.3 148.1h0M106.2 145.7h0M113.6 143.1h0M117.4 140.3h0M125.6 137.7h0M130.5 135.8h0M95.7 153.7h0M103.5 151.3h0M109.8 148.6h0M118.8 146h0M121.8 143.6h0M130 140.2h0M136.7 138.4h0M142.3 135.6h0M99.2 156.6h0M108.9 154.4h0M115.7 150.4h0M120.1 149.4h0M127.4 145.7h0M134.7 142.7h0M141.3 139.3h0M146.3 137.8h0M152.9 135.8h0M117.1 154.9h0M128.1 151.3h0M131.6 149.1h0M138.5 146h0M146.4 142.7h0M150.6 141h0M156.2 138.5h0M161.5 135.7h0M131.8 155.2h0M137.2 151.7h0M144.5 148.5h0M153.3 145.7h0M155.2 144h0M162.2 141.3h0M168.1 139.3h0M173.7 136.2h0M144.6 156.1h0M149.1 152.2h0M158.8 149h0M162.5 146.7h0M169.8 143.8h0M173.1 141.5h0M178.5 139h0M184.2 136.3h0M189 134.4h0M155.1 154.2h0M160.6 152.4h0M170.7 149.8h0M175.7 145.5h0M179.9 143.8h0M185.4 141.3h0M192.6 138.7h0M194.9 136.7h0M170.8 155.9h0M176.3 153.5h0M180.1 148.4h0M186.5 146.1h0M191.9 144.5h0M197 142h0M202.2 138.6h0M208.9 136.4h0M180.6 156.1h0M187.2 152.2h0M191.2 149.8h0M198.7 148h0M202.9 145.1h0M207.8 141.8h0M212.6 139.1h0M217.1 135h0M223.2 134.3h0M192.4 155.7h0M200.6 152.3h0M205.9 150.5h0M211.4 147.4h0M214.7 143.2h0M220.2 142.3h0M223.5 138.1h0M228.6 136.7h0M231.8 134h0M206.8 157h0M211.5 151.6h0M219.6 150.3h0M221.4 146.5h0M226.6 143.6h0M232.6 141.7h0M234 139.4h0M240.2 136.7h0M244.6 134.7h0M217.3 155.8h0M222.7 152.8h0M230.1 149.6h0M231.8 147.1h0M239.4 144.7h0M241.8 141.8h0M245.8 138.6h0M251.1 137.2h0" stroke="#a9bf98" stroke-width="2.7" stroke-linecap="round"/>
+                  <path d="M52.4 160.8h0M59 157.3h0M66.2 154.6h0M50.9 153.9h0M58.9 152.3h0M66.7 148.4h0M51.5 146.8h0M59.7 144.9h0M67.5 141.9h0M48.6 139.9h0M57.6 137.2h0M64.2 136.4h0M72 134.5h0M48 135h0M56.7 132.8h0M63.7 128.8h0M72.2 128.2h0M47.7 127.6h0M54.2 124.5h0M64.6 121.5h0M70.9 120.5h0M77.9 119.7h0M46.1 121.9h0M54.1 118.8h0M63.4 116.6h0M70.2 114.9h0M76.3 113.8h0M44.5 112.7h0M52.7 112.8h0M61.9 108.5h0M69.3 109.1h0M75.4 107.6h0M83.4 103.8h0M46 106.9h0M51.4 105.3h0M60.6 103.9h0M68.9 100.9h0M76.7 99h0M84.1 98.5h0M43.5 99.2h0M50.1 97.7h0M59.9 97.1h0M67.3 93.3h0M75.2 92.4h0M81.7 92.9h0M40.9 92.6h0M49.7 91.5h0M58.2 90.5h0M65.5 86.7h0M75.8 87h0M80.5 85.1h0M88.1 82.8h0M40.5 86.3h0M50.2 82.4h0M58.9 81h0M66.5 80.6h0M72.1 80.2h0M80.4 77.6h0M88.7 76.2h0M40.2 78.4h0M48 75h0M57.4 74.3h0M66.5 74.5h0M71.6 73.8h0M80.5 69.7h0M87.4 70.3h0M93.1 69.3h0M38.3 68.9h0M45.9 68h0M56.5 65.8h0M64.1 65.3h0M71.1 64.6h0M80.3 63.6h0M87 62.8h0M92.7 62.1h0M36 61.6h0M44.1 59.8h0M53.9 60.2h0M62.9 58.3h0M70.6 56.6h0M77.3 56.2h0M87 57.2h0M93.1 56.8h0M100.7 54.2h0M37.7 52.6h0M44.3 53.1h0M54.1 51.3h0M60.6 50.5h0M70.3 51.7h0M76.6 50.8h0M85.6 48.6h0M93.5 48.1h0M99.4 47.3h0M35.7 44.8h0M43.2 44.1h0M53.6 44.9h0M60.7 42.8h0M69.2 43.1h0M78.4 41.3h0M84.2 43.1h0M92.1 40.3h0M98.9 39.5h0M105.4 41h0M32.9 36.2h0M43.9 36.3h0M52.6 34.6h0M59.3 36.8h0M67.2 36.3h0M76.3 33.5h0M84.8 33h0M91.1 34.3h0M99.4 34.4h0M105 32.2h0M100.7 83.6h0M101.5 82.8h0" stroke="#8fae8a" stroke-width="3.1" stroke-linecap="round"/>
+                  <path d="M57.1 164.2h0M66.2 159.2h0M72.8 157.3h0M59.2 169h0M67.9 166.4h0M78.3 160.7h0M85.8 158h0M65.1 171h0M73.7 169.4h0M82 165.6h0M90.3 162.8h0M70.4 176.9h0M79.1 172.3h0M89.7 168.6h0M94.8 165.9h0M103.4 162.7h0M110.8 157.3h0M72.6 181.1h0M80.7 177.2h0M90.8 174.1h0M100.4 170.1h0M110.7 164.8h0M114 161.5h0M124.6 157.4h0M74 185.4h0M87.4 180h0M97.1 176.7h0M104.5 172.1h0M112.6 168.7h0M121.9 166.3h0M129.7 161.2h0M138.4 159.1h0M84.3 190.6h0M92.5 187.7h0M101.3 182.2h0M109.7 176.5h0M118 174.2h0M130.2 169.1h0M137.2 164.6h0M141.9 162.8h0M147.4 158.4h0M109 187.6h0M115.9 182.8h0M124.7 178h0M131.5 172.9h0M140.3 168.3h0M148.4 166h0M157.9 161.7h0M165.1 159.4h0M124.6 185.7h0M131.5 183.6h0M140.3 176.7h0M148.8 172.3h0M156.4 170.5h0M162.4 165.7h0M166.8 162.5h0M175.3 157.2h0M137.8 187.1h0M150 182.3h0M153.9 177.3h0M161.9 172.6h0M171.5 169.9h0M175.9 167.5h0M180 162h0M188.1 160h0M146 190.5h0M154.8 185.7h0M162.6 183.9h0M167.9 179.2h0M176.4 172.9h0M185.6 169.6h0M186.9 166.6h0M194.5 163.3h0M200 158.9h0M169.4 185.1h0M173.6 181.8h0M186.3 178.2h0M190 175.5h0M197.4 171.8h0M205.6 166.3h0M208.6 164.2h0M214.8 159.3h0" stroke="#c4d4b4" stroke-width="3.1" stroke-linecap="round"/>
+                  </g>
+                  <path d="M155.3 130.5 L197.4 111.4 L228.3 102.4 L252.1 94.4 L271.5 84" class="sr-track"/>
+                  <g class="sr-cam"><polygon points="129.3 117.7 154.8 111.2 155.6 130.4 130.7 138.1" class="sr-cam-plane"/><path d="M155.3 130.5L129.3 117.7M155.3 130.5L154.8 111.2M155.3 130.5L155.6 130.4M155.3 130.5L130.7 138.1" class="sr-cam-wire"/><circle cx="155.3" cy="130.5" r="2.4" class="sr-cam-eye"/></g>
+                  <g class="sr-cam"><polygon points="173.9 101.5 192.4 96.5 192.6 113.5 174.5 119.6" class="sr-cam-plane"/><path d="M197.4 111.4L173.9 101.5M197.4 111.4L192.4 96.5M197.4 111.4L192.6 113.5M197.4 111.4L174.5 119.6" class="sr-cam-wire"/><circle cx="197.4" cy="111.4" r="2.4" class="sr-cam-eye"/></g>
+                  <g class="sr-cam"><polygon points="207.6 93.9 220.9 89.6 220.3 104.6 207.3 109.8" class="sr-cam-plane"/><path d="M228.3 102.4L207.6 93.9M228.3 102.4L220.9 89.6M228.3 102.4L220.3 104.6M228.3 102.4L207.3 109.8" class="sr-cam-wire"/><circle cx="228.3" cy="102.4" r="2.4" class="sr-cam-eye"/></g>
+                  <g class="sr-cam"><polygon points="233.9 87 243.3 83.3 242.3 96.7 233 101.2" class="sr-cam-plane"/><path d="M252.1 94.4L233.9 87M252.1 94.4L243.3 83.3M252.1 94.4L242.3 96.7M252.1 94.4L233 101.2" class="sr-cam-wire"/><circle cx="252.1" cy="94.4" r="2.4" class="sr-cam-eye"/></g>
+                  <g class="sr-cam"><polygon points="255.2 77.9 261.5 74.9 260.7 87.2 254.4 90.9" class="sr-cam-plane"/><path d="M271.5 84L255.2 77.9M271.5 84L261.5 74.9M271.5 84L260.7 87.2M271.5 84L254.4 90.9" class="sr-cam-wire"/><circle cx="271.5" cy="84" r="2.4" class="sr-cam-eye"/></g>
+                </svg></span>
+                <p><b>Metric reconstruction</b><span>COLMAP refines ARKit's poses. Depth comes from LiDAR or π³, scale from LiDAR or the meter.</span><code>poses · scale · dense</code></p>
+              </li>
+              <li class="server-node">
+                <span class="art"><svg class="server-art" viewBox="0 0 320 200" aria-hidden="true">
+                  <rect width="320" height="200" fill="url(#art-stage)"/>
+                  <ellipse cx="116" cy="176" rx="96" ry="10" fill="#1f2d24" fill-opacity=".16" filter="url(#soft-blur)"/>
+                  <polygon points="27.2 105.2 149.8 176 149.8 178.9 27.2 108.1" class="ss-slab-front"/>
+                  <polygon points="193.4 150.8 149.8 176 149.8 178.9 193.4 153.7" class="ss-slab-side"/>
+                  <polygon points="70.8 80 86.4 89 42.8 114.2 27.2 105.2" class="ss-unseen"/>
+                  <polygon points="86.4 89 193.4 150.8 149.8 176 42.8 114.2" class="ss-seen"/>
+                  <path d="M91.6 92L48 117.2M102 98L58.4 123.2M112.4 104L68.7 129.2M122.8 110L79.1 135.2M133.2 116L89.5 141.2M143.6 122L99.9 147.2M154 128L110.3 153.2M164.4 134L120.7 159.2M174.7 140L131.1 165.2M185.1 146L141.5 171.2M76 95L183.1 156.8M65.6 101L172.7 162.8M55.2 107L162.3 168.8" class="ss-grid"/>
+                  <path d="M86.4 89L42.8 114.2" class="ss-edge-seen"/>
+                  <polygon points="75.4 12.6 198 83.4 193.4 86 70.8 15.2" class="ss-wall-top"/>
+                  <polygon points="193.4 150.8 193.4 86 198 83.4 198 148.2" class="ss-wall-end"/>
+                  <polygon points="70.8 80 193.4 150.8 193.4 86 70.8 15.2" class="ss-wall-face"/>
+                  <path d="M70.8 75.7L193.4 146.5M70.8 71.4L193.4 142.2M70.8 67L193.4 137.8M70.8 62.7L193.4 133.5M70.8 58.4L193.4 129.2M70.8 54.1L193.4 124.9M70.8 49.8L193.4 120.6M70.8 45.4L193.4 116.2M70.8 41.1L193.4 111.9M70.8 36.8L193.4 107.6M70.8 32.5L193.4 103.3M70.8 28.2L193.4 99M70.8 23.8L193.4 94.6M70.8 19.5L193.4 90.3" class="ss-courses"/>
+                  <polygon points="130.3 89.8 152.7 102.8 152.7 74.5 130.3 61.5" class="ss-casing"/>
+                  <polygon points="132.1 89 150.8 99.8 150.8 75.8 132.1 65" class="ss-glass"/>
+                  <path d="M141.5 94.4L141.5 70.4M132.1 76.5L150.8 87.3" class="ss-mullion"/>
+                  <polygon points="98.7 67.3 95.8 69 102.4 72.8 105.3 71.1" class="ss-meter-side"/>
+                  <polygon points="105.3 71.1 105.3 61 102.4 62.7 102.4 72.8" class="ss-meter-side"/>
+                  <polygon points="98.7 57.2 105.3 61 102.4 62.7 95.8 58.9" class="ss-meter-top"/>
+                  <polygon points="95.8 69 102.4 72.8 102.4 62.7 95.8 58.9" class="ss-meter-face"/>
+                  <ellipse cx="99.1" cy="64.6" rx="2.6" ry="2.3" class="ss-dial"/>
+                  <path d="M101 69.8 L101 96.2 L167.5 134.6" class="ss-cable"/>
+                  <polygon points="163.3 133.4 190.3 149 164.4 164 137.3 148.4" class="ss-envelope"/>
+                  <polygon points="156 143.6 172.7 153.2 171 154.2 154.4 144.6" class="ss-contact"/>
+                  <polygon points="156 143.6 172.7 153.2 172.7 128.7 156 119.1" class="ss-bat-front"/>
+                  <polygon points="184.3 146.5 172.7 153.2 172.7 128.7 184.3 122" class="ss-bat-side"/>
+                  <polygon points="167.7 112.4 184.3 122 172.7 128.7 156 119.1" class="ss-bat-top"/>
+                  <path d="M163.3 144.9L163.3 126.2" class="ss-bat-stripe"/>
+                  <g transform="translate(218 20)" filter="url(#lift)"><rect width="88" height="62" rx="9" fill="#fbfbf7"/>
+                    <path d="M10 16h52M10 31h52M10 46h52" stroke="#dde2d7" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M36 9v44" stroke="#293b30" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M42 16h16m-16-4v8m16-8v8" stroke="#34502c" stroke-width="3" stroke-linecap="round" fill="none"/>
+                    <path d="M44 31h14m-14-4v8m14-8v8" stroke="#34502c" stroke-width="3" stroke-linecap="round" fill="none"/>
+                    <path d="M26 46h20m-20-4v8m20-8v8" stroke="#a87412" stroke-width="3" stroke-linecap="round" fill="none"/>
+                    <circle cx="75" cy="16" r="5.6" fill="#34502c"/><path d="m72.4 16 1.9 1.9 3.3-3.9" stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="75" cy="31" r="5.6" fill="#34502c"/><path d="m72.4 31 1.9 1.9 3.3-3.9" stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="75" cy="46" r="5.6" fill="#e2b453"/><path d="M73.2 44.3a1.9 1.9 0 1 1 2.4 1.8c-.4.1-.6.4-.6.9" stroke="#3b2a05" stroke-width="1.4" fill="none" stroke-linecap="round"/><circle cx="75" cy="49.4" r=".8" fill="#3b2a05"/></g>
+                </svg></span>
+                <p><b>Scene and rules</b><span>Walls, ground, equipment and what was actually seen. Rules decide; other checks can only veto or downgrade.</span><code>scene · criteria</code></p>
+              </li>
+              <li class="server-node">
+                <span class="art"><svg class="server-art" viewBox="0 0 320 200" aria-hidden="true">
+                  <rect width="320" height="200" fill="url(#art-stage)"/>
+                  <ellipse cx="170" cy="184" rx="118" ry="8" fill="#1f2d24" fill-opacity=".18" filter="url(#soft-blur)"/>
+                  <g transform="translate(166 46)"><rect x="6" y="8" width="138" height="118" rx="11" fill="#e8ede2" filter="url(#lift-tight)"/><rect width="138" height="118" rx="11" fill="#fbfbf7" filter="url(#lift)"/>
+                    <rect x="14" y="14" width="70" height="16" rx="8" fill="#f1e2bd"/><path d="M24 22h50" stroke="#7a5207" stroke-width="3" stroke-linecap="round" opacity=".55"/>
+                    <path d="M14 44h100M14 55h78" stroke="#c9d2c0" stroke-width="3.4" stroke-linecap="round"/>
+                    <rect x="14" y="70" width="18" height="18" rx="3" fill="#1f66f2" fill-opacity=".1" stroke="#1f66f2" stroke-width="1.6" stroke-dasharray="3.5 2.5"/><path d="M40 76h70M40 84h44" stroke="#c9d2c0" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M14 100h18M14 100v-4m18 4v-4" stroke="#34502c" stroke-width="2.4" stroke-linecap="round" fill="none"/><path d="M40 100h56" stroke="#c9d2c0" stroke-width="3" stroke-linecap="round"/></g>
+                  <g filter="url(#lift)"><rect x="40" y="12" width="86" height="178" rx="18" fill="url(#phone-body)"/></g>
+                  <rect x="40.8" y="12.8" width="84.4" height="176.4" rx="17.2" fill="none" stroke="#fff" stroke-opacity=".16" stroke-width="1.2"/>
+                  <clipPath id="result-screen"><rect x="45" y="17" width="76" height="168" rx="13.5"/></clipPath>
+                  <g clip-path="url(#result-screen)">
+                    <svg x="45" y="17" width="76" height="168" viewBox="-238 -262 160 354" preserveAspectRatio="xMidYMid slice"><use href="#film-world"/></svg>
+                    <rect x="45" y="17" width="76" height="168" fill="url(#print-sheen)"/>
+                    <path d="M60 145 106 145 115 176 51 176Z" fill="#1f66f2" fill-opacity=".16" stroke="#1f66f2" stroke-width="1.8" stroke-dasharray="4.5 3" stroke-linejoin="round"/>
+                    <path d="M77 157h12M83 151v12" stroke="#1f66f2" stroke-width="1.8" stroke-linecap="round"/>
+                    <rect x="50" y="36" width="66" height="22" rx="7" fill="#fbfbf7" fill-opacity=".94"/><path d="M56 44h40M56 51h26" stroke="#9aa39b" stroke-width="2.4" stroke-linecap="round"/>
+                  </g>
+                  <rect x="70" y="21" width="26" height="7" rx="3.5" fill="#0d1310"/>
+                </svg></span>
+                <p><b>Result</b><span>A spot for an installer to review, or the views still needed, placed in AR.</span><code>GET …/result</code></p>
+              </li>
+            </ol>
+            <p class="server-events"><code>GET …/events</code>Progress from each stage, back to the phone</p>
+          </figure>
+          <div class="code">
+            <p class="code-head"><span class="code-file">result.json</span><span class="code-note">Abridged, example values</span></p>
+            <pre class="json" tabindex="0" aria-label="result.json, abridged, with example values"><code>{
+  <span class="k">"status"</span>: <span class="s">"needs_views"</span>,
+  <span class="k">"outcome"</span>: {
+    <span class="k">"kind"</span>: <span class="s">"needs_more_photos"</span>,
+    <span class="k">"viewsNeeded"</span>: [{
+      <span class="k">"id"</span>: <span class="s">"vn1"</span>,
+      <span class="k">"kind"</span>: <span class="s">"band"</span>,
+      <span class="k">"band"</span>: <span class="s">"ground"</span>,
+      <span class="k">"side"</span>: <span class="s">"left"</span>,
+      <span class="k">"sM"</span>: [<span class="n">-1.8</span>, <span class="n">-0.2</span>],
+      <span class="k">"viewingAngleDeg"</span>: [<span class="n">20</span>, <span class="n">60</span>]
+    }]
+  },
+  <span class="k">"criteria"</span>: [{
+    <span class="k">"id"</span>: <span class="s">"route_length"</span>,
+    <span class="k">"outcome"</span>: <span class="s">"pass"</span>,
+    <span class="k">"measuredFt"</span>: <span class="n">14.0</span>,
+    <span class="k">"plusMinusFt"</span>: <span class="n">0.6</span>,
+    <span class="k">"coverage"</span>: <span class="s">"observed"</span>
+  }]
+}</code></pre>
+          </div>
         </div>
       </section>
-      <section class="closing" aria-labelledby="closing-title"><div class="wrap closing-content"><svg class="closing-icon" aria-hidden="true"><use href="#icon-home"/></svg><div><h2 id="closing-title">One good look.<br>A clearer next step.</h2><p>Give the homeowner a simpler task and the reviewer a more useful picture of the home.</p><a class="button light" href="https://github.com/SamGu-NRX/house-scanning-master" rel="noopener">Follow the project on GitHub</a></div></div></section>
+
+      <section class="unseen wrap" id="unseen" aria-labelledby="unseen-title">
+        <div class="unseen-copy">
+          <h2 id="unseen-title">Unseen ground stays unsure.</h2>
+          <p>The walk went right, so the ground left of the meter was never seen. Drag across the wall to show it, and the checks settle.</p>
+        </div>
+        <figure class="unseen-figure" data-unseen>
+          <div class="unseen-scene" data-unseen-scene data-wall="pass" data-ground="pass" data-room="fail">
+            <svg viewBox="-300 -272 400 312" preserveAspectRatio="xMidYMid slice" role="img" aria-label="The illustrated wall left of the meter: a hose reel, a shrub standing on gravel, and the outline of a battery at a closer spot, inside the clear space it needs.">
+              <use href="#film-world"/>
+              <!-- The candidate spot, drawn in the checks' regions (story.js): the clear space it needs spans -226 to
+                   -100 cm, the battery -190 to -114 cm. Each part takes its check's colour once any of it is seen. -->
+              <g class="us-spot">
+                <rect class="us-envelope" x="-226" y="-128" width="126" height="128" rx="4"/>
+                <path class="us-ground" d="M-196 0h88l12 9h-88Z"/>
+                <path class="us-bat-top" d="M-190 -100l12 -9h76l-12 9Z"/>
+                <path class="us-bat-side" d="M-114 -100l12 -9v100l-12 9Z"/>
+                <rect class="us-bat-front" x="-190" y="-100" width="76" height="100" rx="2"/>
+                <path class="us-bat-stripe" d="M-152 -86v70"/>
+              </g>
+            </svg>
+            <div class="unseen-haze" data-unseen-haze aria-hidden="true"></div>
+            <span class="unseen-divider" data-unseen-divider aria-hidden="true"><span class="unseen-grip"></span></span>
+            <button class="unseen-request" type="button" data-unseen-reveal hidden><svg aria-hidden="true"><use href="#g-viewfinder"/></svg>Show the ground left of the meter</button>
+            <input class="unseen-range" type="range" min="0" max="100" value="0" step="1" aria-label="How far left of the meter the phone has seen">
+          </div>
+          <figcaption class="checks">
+            <div class="checks-head"><p>A closer spot, 5&nbsp;ft left of the meter</p><p class="verdict" data-verdict data-state="fail" aria-live="polite">Not here</p></div>
+            <ul class="check-list">
+              <li data-check="wall" data-state="pass" style="--lo: .7; --hi: .86"><span class="check-name">Wall behind it</span><span class="bar" aria-hidden="true"><span class="bar-limit"></span><span class="bar-estimate"></span></span><span class="chip" data-chip>Pass</span></li>
+              <li data-check="ground" data-state="pass" style="--lo: .64; --hi: .8"><span class="check-name">Ground under it</span><span class="bar" aria-hidden="true"><span class="bar-limit"></span><span class="bar-estimate"></span></span><span class="chip" data-chip>Pass</span></li>
+              <li data-check="room" data-state="fail" style="--lo: .12; --hi: .28"><span class="check-name">Clear space</span><span class="bar" aria-hidden="true"><span class="bar-limit"></span><span class="bar-estimate"></span></span><span class="chip" data-chip>Fail</span></li>
+            </ul>
+            <p class="legend"><span class="legend-limit" aria-hidden="true"></span>Rule limit<span class="legend-estimate" aria-hidden="true"></span>Estimate and its error</p>
+          </figcaption>
+        </figure>
+      </section>
+
+      <section class="next wrap" aria-labelledby="next-title">
+        <h2 id="next-title">The research behind the pipeline.</h2>
+        <p>The briefing compares LiDAR reconstruction, learned depth and world models, with the tests behind each.</p>
+        <div class="next-actions"><a class="button" href="https://house-scanning-briefing.vercel.app/" rel="noopener">Read the briefing</a><a class="text-link" href="https://github.com/SamGu-NRX/house-scanning-master" rel="noopener">The project on GitHub</a></div>
+      </section>
     </main>
-    <footer class="site-footer wrap"><p>House scanning</p><p>A home battery survey, taking shape.</p><a href="https://github.com/SamGu-NRX/house-scanning-landing" rel="noopener">Site source on GitHub</a></footer>
+    <footer class="site-footer wrap">
+      <p>Example survey and measurements. An installer reviews the suggested spot.</p>
+      <a href="https://github.com/SamGu-NRX/house-scanning-landing" rel="noopener">Site source</a>
+    </footer>
   </body>
 </html>
