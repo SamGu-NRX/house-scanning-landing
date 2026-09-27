@@ -541,7 +541,8 @@
                 <g class="reading" data-reading="placed">
                   <path class="film-cable" d="M0 -117V-34H322"/>
                   <rect x="306" y="2" width="104" height="24" rx="2" fill="#45603b" fill-opacity=".3"/>
-                  <rect x="304" y="-128" width="108" height="128" rx="3" fill="#45603b" fill-opacity=".08" stroke="#293b30" stroke-width="2" stroke-dasharray="6 5"/>
+                  <!-- Keep the outline inside the third panel's cropped edge, including its mobile gutter. -->
+                  <rect x="318" y="-128" width="94" height="128" rx="3" fill="#45603b" fill-opacity=".08" stroke="#293b30" stroke-width="2" stroke-dasharray="6 5"/>
                   <g class="film-battery">
                     <path d="M322 -100l12 -9h76l-12 9Z" fill="#fff"/>
                     <path d="M398 -100l12 -9v100l-12 9Z" fill="#D8DBE0"/>
